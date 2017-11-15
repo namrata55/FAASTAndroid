@@ -1,0 +1,73 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@drawable/shadow">
+
+    <LinearLayout
+        android:id="@+id/name_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/hotspot_topups_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Service_Name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_weight="1"
+           />
+
+        <TextView
+            android:id="@+id/hotspot_topups_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/hotspot_topups_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_line"
+        android:text="Service Id"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/white" />
+
+
+    <TextView
+        android:id="@+id/hotspot_topups_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hotspot_topups_speed"
+        android:layout_marginTop="5dp"
+        android:gravity="bottom|left"
+        android:text="Speed"
+        android:textColor="@android:color/white"
+        />
+
+    <Button
+        android:text="Buy"
+        android:id="@+id/hotspot_buy"
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:focusable="false"
+        android:background="#000000"
+        android:textColor="@android:color/white"
+        android:focusableInTouchMode="false"
+        android:layout_alignBottom="@+id/hotspot_topups_data"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

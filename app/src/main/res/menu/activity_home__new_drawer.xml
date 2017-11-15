@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group  android:checkableBehavior="single"
+      >
+        <item
+            android:id="@+id/home_menu"
+            android:icon="@mipmap/home2"
+            android:title="@string/home" />
+
+        <item
+            android:id="@+id/faast_prime_menu"
+            android:icon="@mipmap/arrow"
+            android:title="@string/faast_prime"
+            />
+
+        <item
+            android:id="@+id/payment_hisory_menu"
+            android:icon="@mipmap/paymeny_history2"
+            android:title="@string/payment_history"
+            />
+        <item
+            android:id="@+id/upgrade_plan_menu"
+            android:icon="@mipmap/change0"
+            android:title="@string/plan_change" />
+     <!--   <item
+            android:id="@+id/support_menu"
+            android:icon="@drawable/support_menu2"
+            android:title="@string/support" />-->
+
+        <item
+            android:id="@+id/contact_us_menu"
+            android:icon="@mipmap/mail"
+            android:title="@string/contact_us" />
+
+        <item
+            android:id="@+id/offers_menu"
+            android:icon="@mipmap/gift6"
+            android:title="@string/offers" />
+        <item
+            android:id="@+id/version_menu"
+            android:icon="@mipmap/about"
+            android:title="@string/about" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@mipmap/logout1"
+            android:title="@string/logout" />
+
+    </group>
+
+</menu>

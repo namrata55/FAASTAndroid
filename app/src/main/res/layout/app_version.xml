@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#00ba30">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/back_button"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        app:srcCompat="@mipmap/back6"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <LinearLayout
+        android:layout_width="240dp"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:background="@color/faast_green"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="FAAST NETWORKS"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:fontFamily="Open Sans"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_above="@+id/version"
+            android:layout_centerHorizontal="true" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_height="60dp"
+            android:layout_width="match_parent"
+            app:srcCompat="@mipmap/arrow_white"
+            android:id="@+id/appCompatImageView2"
+            android:layout_below="@+id/back_button"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/version"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="Open Sans"
+        android:layout_above="@+id/appCompatImageView2"
+        android:layout_centerHorizontal="true" />
+
+        <TextView
+        android:text="Released Date : 14/11/2017"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:fontFamily="Open Sans"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</LinearLayout>
+
+</RelativeLayout>

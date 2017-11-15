@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
+    useLibrary 'org.apache.http.legacy'
+
+    defaultConfig {
+        applicationId "com.faast.mobile.apps"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 35
+        versionName "6.6"
+        multiDexEnabled true
+    }
+    dexOptions {
+        incremental false
+        javaMaxHeapSize "4g"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/color'] } }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE' // will not include NOTICE file
+        exclude 'META-INF/LICENSE' // will not include LICENSE file
+        // as noted by @Vishnuvathsan you may also need to include
+        // variations on the file name. It depends on your dependencies.
+        // Some other common variations on notice and license file names
+        exclude 'META-INF/notice'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+    configurations {
+        all {
+            exclude module: 'httpclient'
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.razorpay:checkout:1.4.0'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'org.apache.httpcomponents:httpclient:4.5.3'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    compile 'pl.pawelkleczkowski.customgauge:CustomGauge:1.0.3'
+    compile 'com.google.android.gms:play-services-gcm:11.0.1'
+    compile 'org.jsoup:jsoup:1.8.3'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.koushikdutta.ion:ion:1.1.5'
+    compile 'com.github.tobiasbuchholz:circularviewpager:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
+
+    testCompile 'junit:junit:4.12'
+}
+
+apply plugin: 'com.google.gms.google-services'

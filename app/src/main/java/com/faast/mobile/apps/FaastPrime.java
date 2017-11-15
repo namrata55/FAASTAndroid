@@ -1,0 +1,290 @@
+package com.faast.mobile.apps;
+
+import android.app.ActivityManager;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FaastPrime extends AppCompatActivity {
+
+    Button faastPrimeButton;
+    String UserName,faastPrimeURL,planName;
+    TextView FAASTPrimePriceTextview;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.faast_prime);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00ba30")));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("FAAST Prime");
+        FAASTPrimePriceTextview = (TextView) findViewById(R.id.FAASTPrimePrice);
+        SharedPreferences myPrefs = this.getSharedPreferences("contacts", MODE_PRIVATE);
+        UserName = myPrefs.getString("Username", "");
+
+        SharedPreferences userDetails = this.getSharedPreferences("UserDetails", MODE_PRIVATE);
+        planName = userDetails.getString("srvname", "");
+        String[] serviceName = planName.split(" ");
+        Log.e("Plan",serviceName[0]);
+
+        Intent i = getIntent();
+        String status = i.getStringExtra("faastprime_member_request");
+
+        SharedPreferences Links = getApplicationContext().getSharedPreferences("DatabaseLinks", MODE_PRIVATE);
+        faastPrimeURL = Links.getString("faastprimeurl","");
+
+        faastPrimeButton = (Button) findViewById(R.id.faast_prime_sign_up);
+
+        if(status.equals("1")){
+            faastPrimeButton.setVisibility(View.INVISIBLE);
+        }
+
+
+        if(serviceName[0].equals("SMB")){
+            FAASTPrimePriceTextview.setText("* Prime membership costs Rs.1000 + Taxes yearly.");
+        }
+
+        faastPrimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(FaastPrime.this);
+                //Uncomment the below code to Set the message and title from the strings.xml file
+                //builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
+
+                //Setting message manually and performing action on button click
+                builder.setMessage("Are you sure?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                login(UserName);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                //alert.setTitle("AlertDialogExample");
+                alert.show();
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem)
+    {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+
+    }
+
+    //-----------------------------BROADCAST RECEIVER----------------------------------
+
+    private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            boolean noConnectivity = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+            String reason = intent.getStringExtra(ConnectivityManager.EXTRA_REASON);
+            boolean isFailover = intent.getBooleanExtra(ConnectivityManager.EXTRA_IS_FAILOVER, false);
+
+            NetworkInfo currentNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+            NetworkInfo otherNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO);
+
+            if (currentNetworkInfo.isConnected()) {
+            }
+            else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(FaastPrime.this);
+                // Set the Alert Dialog Message
+                builder.setMessage("Internet Connection Required")
+                        .setCancelable(false)
+                        .setPositiveButton("Retry",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        // Restart the Activity
+                                        registerReceiver(mConnReceiver,
+                                                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+                                    }
+                                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        }
+    };
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.registerReceiver(this.mConnReceiver,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.unregisterReceiver(mConnReceiver);
+        if(isApplicationSentToBackground(this))
+        {
+            finishAffinity();
+        }
+    }
+
+    public boolean isApplicationSentToBackground(final Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void login(final String username) {
+
+        class LoginAsync extends AsyncTask<String, Void, String> {
+
+            private Dialog loadingDialog;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+//                loadingDialog = ProgressDialog.show(Login.this, "Please wait", "Loading...");
+                loadingDialog = createProgressDialog(FaastPrime.this);
+                loadingDialog.show();
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                String uname = params[0];
+
+
+                InputStream is = null;
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("username", uname));
+                String result = null;
+
+                try {
+                    HttpClient httpClient = new DefaultHttpClient();
+//                    HttpPost httpPost = new HttpPost(
+//                            "http://10.0.2.2/android_faast_db/login.php");
+                    HttpPost httpPost = new HttpPost(
+                            faastPrimeURL);
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse response = httpClient.execute(httpPost);
+
+                    HttpEntity entity = response.getEntity();
+
+                    is = entity.getContent();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
+                    StringBuilder sb = new StringBuilder();
+
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                        Log.d("Output=", line);
+                    }
+                    result = sb.toString();
+                } catch (ClientProtocolException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                loadingDialog.dismiss();
+                String s = result.trim();
+                System.out.println(s);
+                if (s.equalsIgnoreCase("success")) {
+                    Toast toast = Toast.makeText(getApplicationContext(),"Your request for FAAST Prime membership has been submitted successfully.", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+
+                    Intent i = new Intent(FaastPrime.this,HomeInternetStatus.class);
+                    startActivity(i);
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please, try once again", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        }
+
+        LoginAsync la = new LoginAsync();
+        la.execute(username);
+    }
+
+    public static ProgressDialog createProgressDialog(Context mContext) {
+        ProgressDialog dialog = new ProgressDialog(mContext);
+        try {
+            dialog.show();
+        } catch (WindowManager.BadTokenException e) {
+
+        }
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.progress_dialogue);
+        // dialog.setMessage(Message);
+        return dialog;
+    }
+}
+

@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "134403361599",
+    "project_id": "firebase-faast"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134403361599:android:469914b36fe37b47",
+        "android_client_info": {
+          "package_name": "com.faast.mobile.apps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5IcfUehNjBQanrk_pi7rAOAqmbIZNX8A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

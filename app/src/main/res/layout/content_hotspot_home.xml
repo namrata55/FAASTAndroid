@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_hotspot_home">
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        >
+        <ViewFlipper
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/viewFlipper_home_hotspot"
+            android:animateFirstView="false"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/slide5"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/slide2"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/slide6"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/slide8"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/slide7"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/slide9"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/slide3"/>
+
+
+        </ViewFlipper>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3.5"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        >
+        <LinearLayout
+            android:id="@+id/plan_details"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5.5"
+            android:weightSum="10"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:weightSum="10">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9"
+                    android:textColor="#8A8D91"
+                    android:text="Current Plan"
+                    android:textSize="14sp"
+                    />
+
+
+            </LinearLayout>
+            <Space
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:layout_width="match_parent"
+                />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:weightSum="10">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+                <TextView
+                    android:id="@+id/current_plan_hotspot"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9"
+                    android:textColor="#000000"
+                    android:text="Current Plan"
+                    android:textSize="12sp"
+
+                    />
+
+            </LinearLayout>
+            <Space
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:layout_width="match_parent"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:weightSum="10">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9"
+                    android:textColor="#8A8D91"
+                    android:text="Valid From"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <Space
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:layout_width="match_parent"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:weightSum="10">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+                <TextView
+                    android:id="@+id/valid_from"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9"
+                    android:textColor="#000000"
+                    android:text="Valid From"
+                    android:textSize="14sp"
+
+                    />
+
+            </LinearLayout>
+            <Space
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:layout_width="match_parent"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:weightSum="10"
+                >
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9"
+                    android:textColor="#8A8D91"
+                    android:text="Valid Upto"
+                    android:id="@+id/due_date_textview"
+                    android:textSize="14sp"
+                    />
+
+            </LinearLayout>
+            <Space
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:layout_width="match_parent"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:weightSum="10"
+               >
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+                <TextView
+                    android:id="@+id/valid_upto"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9"
+                    android:textColor="#000000"
+                    android:text="Valid Upto"
+                    android:textSize="14sp"
+
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4.5"
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:weightSum="10"
+                android:gravity="center">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"/>
+
+
+                <RelativeLayout
+                    android:layout_height="0dp"
+                    android:layout_weight="6.7"
+                    android:layout_width="match_parent"
+                    >
+                    <pl.pawelkleczkowski.customgauge.CustomGauge
+                        android:id="@+id/home_hotspot_gauge"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="8dp"
+                        app:gaugeEndValue="800"
+                        app:gaugePointEndColor="#dd191d"
+                        app:gaugePointStartColor="#e51c23"
+                        app:gaugeStartAngle="90"
+                        app:gaugeStartValue="2"
+                        app:gaugeStrokeCap="ROUND"
+                        app:gaugeStrokeColor="#00ba30"
+                        app:gaugeStrokeWidth="2dp"
+                        app:gaugeSweepAngle="360"
+                        />
+
+                    <TextView
+                        android:id="@+id/graph_value_home_hotspot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:singleLine="false"
+                        android:maxLines="3"
+                        android:textColor="#000000"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="12sp"
+
+                        />
+
+                </RelativeLayout>
+
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"/>
+
+            </LinearLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".01"
+        android:background="#AAB2B3"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3.5"
+        >
+        <GridView
+            android:id="@+id/gridview_home_hotspot"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:numColumns="3"
+            android:stretchMode="columnWidth"
+            android:scrollbars="none"
+            android:isScrollContainer="false"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:background="#00ba30"
+    style="@android:style/TextAppearance.DeviceDefault.Medium"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        >
+
+        <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="com.example.namratas.faast.LoginActivity">-->
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/fasst_icon"
+            android:src="@mipmap/faast_logo_white2"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+             />
+
+        <TextView
+            android:id="@+id/welcome"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:text="Welcome"
+            android:textSize="30dp"
+            android:fontFamily="Open Sans"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:textColor="#FFFFFF"/>
+
+        <LinearLayout
+            android:id="@+id/username_layout"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/fasst_icon"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="#FFFFFF"
+                android:src="@mipmap/user_green"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/username"
+                android:textColor="#a9a9a9"
+                android:fontFamily="Open Sans"
+                android:background="#FFFFFF"
+                android:hint="Username"
+                android:paddingLeft="5dp"
+                android:textColorHint="#a9a9a9"
+                android:maxLines="1"
+                android:inputType="text"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@."
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/password_layout"
+            android:layout_marginTop="25dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/username_layout"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:orientation="horizontal"
+            android:background="#FFFFFF"
+            >
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:background="#FFFFFF"
+                android:paddingBottom="8dp"
+                android:src="@mipmap/key"/>
+            <EditText
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textColor="#a9a9a9"
+                android:background="#FFFFFF"
+                android:fontFamily="Open Sans"
+                android:id="@+id/password"
+                android:hint="Password"
+                android:paddingLeft="5dp"
+                android:inputType="textPassword"
+                android:textColorHint="#a9a9a9"
+                android:maxLines="1"
+                />
+            <RelativeLayout
+                android:layout_height="40dp"
+                android:layout_width="40dp" >
+                <ImageView
+                android:id="@+id/show_password"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:background="#FFFFFF"
+                android:paddingBottom="8dp"
+                android:src="@mipmap/show_password_green1"
+                />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/hide_password"
+                    android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="8dp"
+                    android:background="#FFFFFF"
+                    android:paddingBottom="8dp"
+                    android:src="@mipmap/hide_password_green1"
+                    android:visibility="invisible"
+
+                    />
+          </RelativeLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/white_border"
+            android:text="Login"
+            android:textSize="16dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textColor="#FFFFFF"
+            android:onClick="invokeLogin"
+            android:layout_below="@+id/password_layout"
+            android:fontFamily="Open Sans"
+            />
+
+        <TextView
+            android:id="@+id/forget_password"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right"
+            android:text="Forgot Password?"
+            android:layout_marginRight="25dp"
+            android:textColor="#FFFFFF"
+            android:textAlignment="center"/>
+        <!--
+        </RelativeLayout>
+        -->
+    </LinearLayout>
+</ScrollView>

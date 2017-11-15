@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:isScrollContainer="true"
+    >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/offers_image"
+            android:id="@+id/imageView2" />
+
+        <Space
+        android:layout_height="8dp"
+        android:layout_width="match_parent"
+       />
+
+    <TextView
+        android:text="Referral Bonus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:textSize="18dp"
+        android:textColor="#FFFFFF"
+        android:background="#4cc8ce"
+        android:gravity="center"
+        android:fontFamily="Open Sans"/>
+
+    <TextView
+        android:text="Each successful referral gives you Rs.500 credit which can be used to pay your monthly bills."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textColor="#8A8D91"
+        android:gravity="center"
+        android:fontFamily="Open Sans"/>
+        <Space
+            android:layout_height="8dp"
+            android:layout_width="match_parent"/>
+
+
+        <TextView
+        android:text="Adopt a Tree"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:textColor="#FFFFFF"
+        android:background="#4cc8ce"
+        android:gravity="center"
+      android:fontFamily="Open Sans"/>
+
+    <TextView
+        android:text="Plant a Tree and take care of it month on month and we will discount your monthly invoice by 10% for a whole year."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textColor="#8A8D91"
+        android:gravity="center"
+        android:id="@+id/textView"
+        android:fontFamily="Open Sans"/>
+
+        <Space
+            android:layout_height="8dp"
+            android:layout_width="match_parent"
+            />
+
+        <TextView
+    android:text="FREE Wireless Router Offer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="18dp"
+    android:textColor="#FFFFFF"
+    android:background="#4cc8ce"
+    android:gravity="center"
+        android:fontFamily="Open Sans"/>
+
+        <TextView
+            android:text="Pay for 1 Year in advance and get a Wireless Router Free."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:textColor="#8A8D91"
+            android:gravity="center"
+            android:fontFamily="Open Sans"
+            android:id="@+id/textView5" />
+
+        <Space
+            android:layout_height="8dp"
+            android:layout_width="match_parent"
+            />
+
+
+        <TextView
+        android:text="Initial Installation Offer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:textColor="#FFFFFF"
+        android:background="#4cc8ce"
+        android:gravity="center"
+        android:fontFamily="Open Sans"/>
+
+    <TextView
+        android:text="FREE installation for Apartments and Societies, please note ONLY 100% Residential apartments/societies are elgible for this offer, apartments with commericial establishments do not qualify for this offer."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textColor="#8A8D91"
+        android:gravity="center"
+        android:id="@+id/textView4"
+        android:fontFamily="Open Sans"/>
+
+</LinearLayout>
+    </ScrollView>

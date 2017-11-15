@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    >
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:maxLength="25"
+                android:fontFamily="Open Sans"
+                android:textColor="@color/black"
+                android:gravity="center|left"
+                android:text="Subject"/>
+
+            <EditText
+                android:id="@+id/create_ticket_subject"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="start|center"
+                android:fontFamily="Open Sans"
+                android:text="Others"
+                android:enabled="false"
+                android:focusableInTouchMode="false"
+                android:focusable="false"
+                android:padding="10dp"
+                android:inputType="none"
+                android:textColor="@color/gray"
+                android:background="@drawable/grey_border"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:maxLength="25"
+                android:fontFamily="Open Sans"
+                android:gravity="start|center"
+                android:text="Comment"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/create_ticket_comment"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scrollbars="vertical"
+                android:maxLength="3000"
+                android:padding="10dp"
+                android:fontFamily="Open Sans"
+                android:gravity="start"
+                android:inputType="textMultiLine"
+                android:background="@drawable/grey_border"/>
+
+            <TextView
+                android:id="@+id/comment_char_count"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:maxLength="25"
+                android:layout_gravity="end|center"
+                android:fontFamily="Open Sans"
+                android:text="0/3000"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/faast_green"
+                android:text="submit"
+                android:textColor="@color/white"
+                android:id="@+id/create_ticket_submit" />
+    </LinearLayout>
+
+</ScrollView>

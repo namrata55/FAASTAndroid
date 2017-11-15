@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:weightSum="10"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="vertical"
+        android:background="#EEEEEE"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ticket Id : "
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"
+            android:gravity="start|bottom"
+            />
+
+        <TextView
+            android:id="@+id/ticket_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NA"
+            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="start|top"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="vertical"
+        android:background="#EEEEEE"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Date : "
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:gravity="start|bottom"
+            />
+
+        <TextView
+            android:id="@+id/ticket_create_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NA"
+            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="start|top"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="vertical"
+        android:background="#EEEEEE"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subject : "
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:textStyle="bold"
+            android:gravity="start|bottom"
+            />
+
+        <TextView
+            android:id="@+id/ticket_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NA"
+            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="start|top"
+
+
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="vertical"
+        android:background="#EEEEEE"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comment : "
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:gravity="start|bottom"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/ticket_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NA"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="start|top"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="vertical"
+        android:background="#EEEEEE"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status : "
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:gravity="start|bottom"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/ticket_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NA"
+            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="start|top"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>

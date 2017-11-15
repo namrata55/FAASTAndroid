@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:layout_marginTop="5dp"
+        android:id="@+id/header">
+    </TableLayout>
+
+    <ScrollView
+        android:layout_below="@id/header"
+        android:id="@+id/usage_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars  ="none"
+        >
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:stretchColumns="*"
+            android:id="@+id/maintable" >
+        </TableLayout>
+    </ScrollView>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:id="@+id/footer"
+        android:layout_alignParentBottom="true">
+    </TableLayout>
+
+
+    <TextView
+        android:text="No detailed usage report of this month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:visibility="invisible"
+        android:textSize="15dp"
+        android:id="@+id/no_usage_textview"
+        android:textColor="#8A8D91"
+        android:layout_below="@+id/header"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/shadow"
+    android:padding="5dp"
+   >
+
+    <TextView
+        android:id="@+id/topups_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:gravity="center"
+        android:text="25 GB"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:background="@drawable/round_textview"/>
+
+    <TextView
+        android:id="@+id/topups_price"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="100 Rs."
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/blue_border"
+        android:layout_alignBaseline="@+id/topups_data"
+        android:layout_alignBottom="@+id/topups_data"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+    <Button
+        android:id="@+id/topup_request_button"
+        android:layout_width="85dp"
+        android:layout_height="38dp"
+        android:layout_marginRight="15dp"
+        android:textSize="13dp"
+        android:gravity="center"
+        android:text="Activate"
+        android:textColor="#FFFFFF"
+        android:background="@color/black"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

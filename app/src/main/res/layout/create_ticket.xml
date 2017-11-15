@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:fillViewport="true"
+    >
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        >
+        <TextView
+            android:id="@+id/tickets_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="Open Sans"
+            android:textColor="@color/gray"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:text="Ticket is already exist."/>
+
+        <LinearLayout
+            android:id="@+id/create_ticket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             android:orientation="vertical"
+            android:weightSum="20"
+            android:visibility="invisible"
+           >
+            <TextView
+               android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:maxLength="25"
+                android:fontFamily="Open Sans"
+                android:textColor="@color/black"
+                android:gravity="center|left"
+                android:text="Subject"/>
+
+            <EditText
+                android:id="@+id/create_ticket_subject"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:maxLength="25"
+                android:fontFamily="Open Sans"
+                android:lines="2"
+                android:scrollbars="vertical"
+                android:background="@drawable/grey_border"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:maxLength="25"
+                android:layout_gravity="end|center"
+                android:text="0/25"
+                android:fontFamily="Open Sans"
+                android:id="@+id/subject_char_count" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:maxLength="25"
+                android:fontFamily="Open Sans"
+                android:gravity="start|center"
+                android:text="Comment"
+                android:textColor="@color/black"
+                />
+
+            <EditText
+                android:id="@+id/create_ticket_comment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5"
+                android:lines="3"
+                android:maxLength="3000"
+                android:fontFamily="Open Sans"
+                android:gravity="start"
+                android:inputType="textMultiLine"
+                android:background="@drawable/grey_border"/>
+
+            <TextView
+                android:id="@+id/comment_char_count"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:maxLength="25"
+                android:layout_gravity="end|center"
+                android:fontFamily="Open Sans"
+                android:text="0/3000"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:background="@color/faast_green"
+                android:text="submit"
+                android:textColor="@color/white"
+                android:id="@+id/create_ticket_submit" />
+
+            </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

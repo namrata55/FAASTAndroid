@@ -3,24 +3,24 @@ Changelog
 
 
 ## 5.6    -   24/05/2017
-Home Page:
-Swapped logout and support menus.
+*   Home Page:
+    -   Swapped logout and support menus.
  
-Support Module:
-Redesigned the support module.
-This layout allows to create tickets with using following menus by showing only most important 2 steps .
-Slow internet:
-Allows to create ticket when there will be slow internet occurs.
-No Power On Fiber Modem:
-Allows to create ticket when there will be no power on fiber modem.
-Red LOS On Fiber Modem:
-Allows to create ticket when red light will be on fiber modem.
-No Light On PoE Adaptor:
-Allows to create ticket when no light will be on PoE adaptor.
-Others:
-Allows to create the tickets which different from mentioned above.
-Tickets history:
-Shows list of all tickets raised earlier.
+*   Support Module:
+    -   Redesigned the support module.
+    -   This layout allows to create tickets with using following menus by showing only most important 2 steps .
+*   Slow internet:
+    -   Allows to create ticket when there will be slow internet occurs.
+*   No Power On Fiber Modem:
+    -   Allows to create ticket when there will be no power on fiber modem.
+*   Red LOS On Fiber Modem:
+    -   Allows to create ticket when red light will be on fiber modem.
+*   No Light On PoE Adaptor:
+    -   Allows to create ticket when no light will be on PoE adaptor.
+*   Others:
+    -   Allows to create the tickets which different from mentioned above.
+*   Tickets history:
+    -   Shows list of all tickets raised earlier.
 
 ## 5.7    -   05/11/2017
 *   Home Page
@@ -31,7 +31,7 @@ Shows list of all tickets raised earlier.
 ## 5.9    -   08/08/2017
 
 *   Plan Change:
-    -   Changed error message as �A request for plan change is already pending, kindly wait for current bill cycle to complete.� for when user is requesting for plan change in same month in which current plan is activated.
+    -   Changed error message as "A request for plan change is already pending, kindly wait for current bill cycle to complete." for when user is requesting for plan change in same month in which current plan is activated.
     -   Changed php files according to 10% of extra speed and postspeed for all plans and current plan as well.
 *   Support Module:
     -	Added conversation in ticket history module and created php file for it. and all user commented thing we are making as public and inserting type as 1 in the database
@@ -49,10 +49,10 @@ Shows list of all tickets raised earlier.
 ## 6.1    -   28/08/2017
 
 *   FAAST Prime:
-    -   Added new module called �FAAST Prime� in menu slider.
+    -   Added new module called "FAAST Prime" menu slider.
     -   which is to be requested by customer to upgrade the speed of the internet.
-    -   This module allows the customer to make request to become prime member using �SIGN UP� button.
-    -   Once requested �SIGN UP� button will be invisible for those customer who has requested already.
+    -   This module allows the customer to make request to become prime member using "SIGN UP" button.
+    -   Once requested "SIGN UP" Button will be invisible for those customer who has requested already.
  
 *   UCP Activity:
     -   Earlier we were not storing the SMS which were sent by admin to customers and partners.

@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/faast_blue"
-            android:text="Sign Up"
+            android:text="ACTIVATE"
             android:textColor="@color/white"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="2dp"

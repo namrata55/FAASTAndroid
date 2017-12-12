@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -189,6 +190,9 @@ public class HomeInternetStatus extends AppCompatActivity
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00ba30")));
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Window window = HomeInternetStatus.this.getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(HomeInternetStatus.this.getResources().getColor(R.color.my_statusbar_color));
@@ -288,7 +292,18 @@ public class HomeInternetStatus extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
     }
 
     public class MyTimerTask1 extends TimerTask {
@@ -401,7 +416,7 @@ public class HomeInternetStatus extends AppCompatActivity
                                 public void onClick(DialogInterface dialog,
                                                     int id) {
                                     // Restart the Activity
-                                    dialog.cancel();
+                                    dialog.dismiss();
 //                                    mActivity.startActivity(mActivity.getIntent());
                                     Intent intent = getIntent();
                                     overridePendingTransition(0, 0);
@@ -409,7 +424,6 @@ public class HomeInternetStatus extends AppCompatActivity
                                     finish();
                                     overridePendingTransition(0, 0);
                                     startActivity(intent);
-
                                 }
                             });
             AlertDialog alert = builder111.create();
@@ -526,7 +540,7 @@ public class HomeInternetStatus extends AppCompatActivity
                                     public void onClick(DialogInterface dialog,
                                                         int id) {
                                         // Restart the Activity
-                                        dialog.cancel();
+                                        dialog.dismiss();
                                         registerReceiver(mConnReceiver,
                                                 new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
@@ -635,7 +649,6 @@ public class HomeInternetStatus extends AppCompatActivity
                     }
                 }
                 else if (success.equals("0")) {
-
                 }
 
             } catch (JSONException e) {
@@ -648,7 +661,9 @@ public class HomeInternetStatus extends AppCompatActivity
             super.onPostExecute(result);
             // dismiss the dialog once got all details
             System.out.print(result);
-            pDialog1.dismiss();
+            if (pDialog1 != null && pDialog1.isShowing()) {
+                pDialog1.dismiss();
+            }
 
             for (HashMap<String, String> map : profileList1) {
                 final String firstname = map.get(TAG_FIRSTNAME1);
@@ -753,7 +768,7 @@ public class HomeInternetStatus extends AppCompatActivity
                                 .setIcon(R.mipmap.arrow_white)
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
+                                        dialog.dismiss();
                                         if(accountStatus.equals("0")){
                                             AlertDialog.Builder AccountStatusAlertBox = new AlertDialog.Builder(HomeInternetStatus.this, R.style.MyDialogTheme);
 
@@ -764,7 +779,7 @@ public class HomeInternetStatus extends AppCompatActivity
                                                     .setIcon(R.mipmap.arrow_white)
                                                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                         public void onClick(DialogInterface dialog, int id) {
-                                                            dialog.cancel();
+                                                            dialog.dismiss();
                                                             GetVersionCode getVersionCode=new GetVersionCode();
                                                             getVersionCode.execute();
                                                         }
@@ -791,7 +806,7 @@ public class HomeInternetStatus extends AppCompatActivity
                                     .setIcon(R.mipmap.arrow_white)
                                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
+                                            dialog.dismiss();
                                             GetVersionCode getVersionCode=new GetVersionCode();
                                             getVersionCode.execute();
                                         }
@@ -833,13 +848,12 @@ public class HomeInternetStatus extends AppCompatActivity
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int id) {
-                                    dialog.cancel();
-
+                                    dialog.dismiss();
                                 }
                             })
                     .setPositiveButton("Pay", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
+                            dialog.dismiss();
                             Checkout.preload(getApplicationContext());
                             Total_amount = Double.parseDouble(dm);
                             Toast.makeText(HomeInternetStatus.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
@@ -1007,8 +1021,7 @@ public class HomeInternetStatus extends AppCompatActivity
 
                 try {
                     HttpClient httpClient = new DefaultHttpClient();
-//                    HttpPost httpPost = new HttpPost(
-//                            "http://10.0.2.2/android_faast_db/login.php");
+
                     HttpPost httpPost = new HttpPost(
                             getNonVerifiedTicketsURL);
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -1041,7 +1054,14 @@ public class HomeInternetStatus extends AppCompatActivity
             @Override
             protected void onPostExecute(String result) {
                 loadingDialog.dismiss();
-                String s = result.trim();
+                String s;
+                if(!result.equals(null))
+                {
+                    s = result.trim();
+                }
+                else{
+                    s = "failure";
+                }
                 Log.e("No of tickets",s);
                 if (s.equalsIgnoreCase("success")) {
                     Intent i = new Intent(HomeInternetStatus.this, SupportTicketsTable.class);
@@ -1113,7 +1133,6 @@ public class HomeInternetStatus extends AppCompatActivity
             options.put("name", FirstNameP);
             options.put("prefill", new JSONObject("{email: '"+emailP+"',contact: '"+mobileP+"',name: '"+FirstNameP+"'}"));
             options.put("theme", new JSONObject("{color: '#00ba30'}"));
-
             razorpayCheckout.open(activity, options);
 
         } catch(Exception e){
@@ -1307,7 +1326,7 @@ public class HomeInternetStatus extends AppCompatActivity
 
                     builderUpdate.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
+                            dialog.dismiss();
                             finishAffinity();
                             Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.faast.mobile.apps&hl=en");
                             Intent intent = new Intent(Intent.ACTION_VIEW, uri);

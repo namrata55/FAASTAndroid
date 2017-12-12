@@ -1,5 +1,3 @@
-
-
 package com.faast.mobile.apps;
 
 import android.content.BroadcastReceiver;
@@ -30,10 +28,10 @@ public class Splash extends AppCompatActivity {
     TextView version_num;
     String versionName;
     String msg=null;
-          String server_path="http://rm.faast.in/ucp/android_ucp1/";
+//          String server_path="http://rm.faast.in/ucp/android_ucp1/";
 //      String server_path="http://rm.faast.in/ucp/android_ucp_demo/";
 //      String server_path="http://192.168.1.17/hotspot_android/";
-//    String server_path="http://10.0.2.2:81/android_faast_db/";
+    String server_path="http://10.0.2.2:81/android_faast_db/";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     String token;
 
@@ -89,9 +87,10 @@ public class Splash extends AppCompatActivity {
         editor.putString("gettopupsurl",server_path+"get_topups_list.php");
         editor.putString("getnonverifiedticket",server_path+"get_non_verified_ticket.php");
         editor.putString("getsupportcomments",server_path+"support_comments.php");
-        editor.putString("faastprimeurl",server_path+"faast_prime_request.php");
+        editor.putString("faastprimeurl",server_path+"faast_prime_activation.php");
         editor.putString("imagesliderurl",server_path+"get_images.php");
         editor.putString("requestforreactivationurl",server_path+"request_for_reactivation.php");
+        editor.putString("checkconnectionmodeurl",server_path+"check_connection_mode.php");
         editor.commit();
 
         SharedPreferences razorpay = getApplicationContext().getSharedPreferences("RazorpayKeysDetails", MODE_PRIVATE);

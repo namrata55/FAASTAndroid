@@ -100,25 +100,5 @@
             />
 
 
-        <TextView
-        android:text="Initial Installation Offer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18dp"
-        android:textColor="#FFFFFF"
-        android:background="#4cc8ce"
-        android:gravity="center"
-        android:fontFamily="Open Sans"/>
-
-    <TextView
-        android:text="FREE installation for Apartments and Societies, please note ONLY 100% Residential apartments/societies are elgible for this offer, apartments with commericial establishments do not qualify for this offer."
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:textColor="#8A8D91"
-        android:gravity="center"
-        android:id="@+id/textView4"
-        android:fontFamily="Open Sans"/>
-
-</LinearLayout>
+    </LinearLayout>
     </ScrollView>

@@ -9,8 +9,8 @@ android {
         applicationId "com.faast.mobile.apps"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 35
-        versionName "6.6"
+        versionCode 36
+        versionName "6.7"
         multiDexEnabled true
     }
     dexOptions {

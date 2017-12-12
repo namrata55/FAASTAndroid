@@ -90,14 +90,16 @@ public class UsageGraphFragment extends Fragment {
                 data = getdb.getDataFromDb(UserName,usageReportURL);
                 System.out.println(data);
 
-                getActivity().runOnUiThread(new Runnable() {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        ArrayList<Users> users = parseJSON(data);
-                        addData(users);
-                    }
-                });
+                        @Override
+                        public void run() {
+                            ArrayList<Users> users = parseJSON(data);
+                            addData(users);
+                        }
+                    });
+                }
 
             }
         }).start();
@@ -116,8 +118,6 @@ public class UsageGraphFragment extends Fragment {
             NetworkInfo otherNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO);
 
             if (currentNetworkInfo.isConnected()) {
-
-
             }
             else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -231,15 +231,12 @@ public class UsageGraphFragment extends Fragment {
 
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
         getContext().registerReceiver(this.mConnReceiver,
                 new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
-
-
 
     public void AddValuesToBARENTRY() {
         for(int i = 0;i < datalist.size();i++) {
@@ -266,6 +263,4 @@ public class UsageGraphFragment extends Fragment {
         // dialog.setMessage(Message);
         return dialog;
     }
-
-
 }

@@ -71,25 +71,28 @@ public class DetailedUsageFragment extends Fragment {
         final GetDetailedUsageReport getdb = new GetDetailedUsageReport();
         new Thread(new Runnable() {
             public void run() {
-                data = getdb.getdetailedusagereport(detailedusagereport,UserName);
+                data = getdb.getdetailedusagereport(detailedusagereport, UserName);
 
                 System.out.println(data);
 
-                getActivity().runOnUiThread(new Runnable() {
+                // here you check the value of getActivity() and break up if needed
+                if (getActivity() != null)
+                {
+                    getActivity().runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        ArrayList<Users> users = parseJSON(data);
-                        if(users.size()==0){
-                            TextView t = (TextView) getView().findViewById(R.id.no_usage_textview);
-                            t.setVisibility(View.VISIBLE);
+                        @Override
+                        public void run() {
+                            ArrayList<Users> users = parseJSON(data);
+                            if (users.size() == 0) {
+                                TextView t = (TextView) getView().findViewById(R.id.no_usage_textview);
+                                t.setVisibility(View.VISIBLE);
+                            } else {
+                                addData(users);
+                            }
+                            System.out.println("Output:" + users);
                         }
-                        else {
-                            addData(users);
-                        }
-                        System.out.println("Output:"+users);
-                    }
-                });
+                    });
+            }
 
             }
         }).start();

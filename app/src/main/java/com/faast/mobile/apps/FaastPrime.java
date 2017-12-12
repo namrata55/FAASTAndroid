@@ -48,7 +48,7 @@ import java.util.List;
 public class FaastPrime extends AppCompatActivity {
 
     Button faastPrimeButton;
-    String UserName,faastPrimeURL,planName;
+    String UserName,faastPrimeURL,planName,checkConnectionModeURL;
     TextView FAASTPrimePriceTextview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +71,13 @@ public class FaastPrime extends AppCompatActivity {
 
         SharedPreferences Links = getApplicationContext().getSharedPreferences("DatabaseLinks", MODE_PRIVATE);
         faastPrimeURL = Links.getString("faastprimeurl","");
+        checkConnectionModeURL = Links.getString("checkconnectionmodeurl","");
 
         faastPrimeButton = (Button) findViewById(R.id.faast_prime_sign_up);
 
         if(status.equals("1")){
             faastPrimeButton.setVisibility(View.INVISIBLE);
         }
-
 
         if(serviceName[0].equals("SMB")){
             FAASTPrimePriceTextview.setText("* Prime membership costs Rs.1000 + Taxes yearly.");
@@ -86,31 +86,7 @@ public class FaastPrime extends AppCompatActivity {
         faastPrimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(FaastPrime.this);
-                //Uncomment the below code to Set the message and title from the strings.xml file
-                //builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
-
-                //Setting message manually and performing action on button click
-                builder.setMessage("Are you sure?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                login(UserName);
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //  Action for 'NO' Button
-                                dialog.cancel();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                //alert.setTitle("AlertDialogExample");
-                alert.show();
-
+                check_connection_mode(UserName);
             }
         });
     }
@@ -162,7 +138,6 @@ public class FaastPrime extends AppCompatActivity {
         }
     };
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -192,16 +167,14 @@ public class FaastPrime extends AppCompatActivity {
         return false;
     }
 
-    private void login(final String username) {
+    private void check_connection_mode(final String username) {
 
-        class LoginAsync extends AsyncTask<String, Void, String> {
+        class CheckConnectionModeAsync extends AsyncTask<String, Void, String> {
 
             private Dialog loadingDialog;
-
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-//                loadingDialog = ProgressDialog.show(Login.this, "Please wait", "Loading...");
                 loadingDialog = createProgressDialog(FaastPrime.this);
                 loadingDialog.show();
             }
@@ -218,8 +191,92 @@ public class FaastPrime extends AppCompatActivity {
 
                 try {
                     HttpClient httpClient = new DefaultHttpClient();
-//                    HttpPost httpPost = new HttpPost(
-//                            "http://10.0.2.2/android_faast_db/login.php");
+
+                    HttpPost httpPost = new HttpPost(
+                            checkConnectionModeURL);
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse response = httpClient.execute(httpPost);
+
+                    HttpEntity entity = response.getEntity();
+
+                    is = entity.getContent();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
+                    StringBuilder sb = new StringBuilder();
+
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                        Log.d("Output=", line);
+                    }
+                    result = sb.toString();
+                } catch (ClientProtocolException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                loadingDialog.dismiss();
+                String s = result.trim();
+                System.out.println(s);
+                if (s.equalsIgnoreCase("fiber")) {
+                    activate_faast_prime(UserName);
+                }
+                else {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(FaastPrime.this);
+                    alertDialog.setMessage("Please note that you are on wireless connection, you may be able to achieve anywhere between your plan speed and upto 50Mbps, do you want to continue with prime membership? ");
+                    alertDialog.setIcon(R.mipmap.arrow_white);
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int which) {
+                            activate_faast_prime(UserName);
+                        }
+                    });
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                }
+            }
+        }
+
+        CheckConnectionModeAsync la = new CheckConnectionModeAsync();
+        la.execute(username);
+    }
+
+    private void activate_faast_prime(final String username) {
+
+        class FaastPrimeAsync extends AsyncTask<String, Void, String> {
+
+            private Dialog loadingDialog;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+//                loadingDialog = ProgressDialog.show(Login.this, "Please wait", "Loading...");
+                loadingDialog = createProgressDialog(FaastPrime.this);
+                loadingDialog.show();
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                String uname = params[0];
+                InputStream is = null;
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("username", uname));
+                String result = null;
+
+                try {
+                    HttpClient httpClient = new DefaultHttpClient();
+
                     HttpPost httpPost = new HttpPost(
                             faastPrimeURL);
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -255,13 +312,23 @@ public class FaastPrime extends AppCompatActivity {
                 String s = result.trim();
                 System.out.println(s);
                 if (s.equalsIgnoreCase("success")) {
-                    Toast toast = Toast.makeText(getApplicationContext(),"Your request for FAAST Prime membership has been submitted successfully.", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-
-                    Intent i = new Intent(FaastPrime.this,HomeInternetStatus.class);
-                    startActivity(i);
-                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FaastPrime.this);
+                    // Set the Alert Dialog Message
+                    builder.setMessage("Your FAAST Prime membership request has been activated successfully")
+                            .setCancelable(false)
+                            .setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog,
+                                                            int id) {
+                                            dialog.dismiss();
+                                            Intent i = new Intent(FaastPrime.this,HomeInternetStatus.class);
+                                            startActivity(i);
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else {
                     Toast toast = Toast.makeText(getApplicationContext(),"Please, try once again", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
@@ -269,7 +336,7 @@ public class FaastPrime extends AppCompatActivity {
             }
         }
 
-        LoginAsync la = new LoginAsync();
+        FaastPrimeAsync la = new FaastPrimeAsync();
         la.execute(username);
     }
 

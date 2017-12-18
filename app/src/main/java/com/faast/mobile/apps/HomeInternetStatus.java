@@ -1131,7 +1131,7 @@ public class HomeInternetStatus extends AppCompatActivity
             Integer amt = Final_Amount*100;
             options.put("amount", amt);
             options.put("name", FirstNameP);
-            options.put("prefill", new JSONObject("{email: '"+emailP+"',contact: '"+mobileP+"',name: '"+FirstNameP+"'}"));
+options.put("prefill", new JSONObject("{email: '"+emailP+"',contact: '"+mobileP+"',name: '"+FirstNameP+"'}"));
             options.put("theme", new JSONObject("{color: '#00ba30'}"));
             razorpayCheckout.open(activity, options);
 

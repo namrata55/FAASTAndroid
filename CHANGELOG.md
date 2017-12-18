@@ -131,3 +131,17 @@ Changelog
     -   Added monthly word after data limit
 *   TopUps:
     -   Showing error message as “Sorry, TopUps are currently not allowed for DAILY plans.” For DAILY customers.
+    
+## 6.7  -   11/12/2017
+
+* FAAST Prime :
+    -   Automated FAAST prime
+    -   Sorted plan in Plan Change Module
+    -   Deleted one offer from Offers module["Initial Installation Offer" - "FREE installation for Apartments and Societies, please note ONLY 100% Residential apartments/societies are elgible for this offer, apartments with commericial establishments do not qualify for this offer."]
+    
+## 6.8  -  16/12/2017
+
+*   FAAST Prime : 
+    -  Showing confirmation alert box after tapping on "ACTIVATE" button with message as ""Are you sure, You will be charged Rs.500 + taxes annually for the FAAST Prime Membership, once activated, Prime subscription cannot be cancelled for the current year." for home customers and "Are you sure, You will be charged Rs.1000 + taxes annually for the FAAST Prime Membership, once activated, Prime subscription cannot be cancelled for the current year." for SMB customers.
+    -  checking if nexsrvid for current plan is present or not . If present then rest procedure as it is. If not present then showing error message as "Prime membership is currently not applicable for your current plan."
+    -  Sorted plans for daily 100 plans

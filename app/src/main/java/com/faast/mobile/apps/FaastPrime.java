@@ -48,8 +48,9 @@ import java.util.List;
 public class FaastPrime extends AppCompatActivity {
 
     Button faastPrimeButton;
-    String UserName,faastPrimeURL,planName,checkConnectionModeURL;
+    String UserName,faastPrimeURL,planName,checkConnectionModeURL,checkNextSrvidURL;
     TextView FAASTPrimePriceTextview;
+    String message = "Are you sure, You will be charged Rs.500 + taxes annually for the FAAST Prime Membership, once activated, Prime subscription cannot be cancelled for the current year.";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +73,7 @@ public class FaastPrime extends AppCompatActivity {
         SharedPreferences Links = getApplicationContext().getSharedPreferences("DatabaseLinks", MODE_PRIVATE);
         faastPrimeURL = Links.getString("faastprimeurl","");
         checkConnectionModeURL = Links.getString("checkconnectionmodeurl","");
+        checkNextSrvidURL = Links.getString("checknextsrvidforfaastprimeurl","");
 
         faastPrimeButton = (Button) findViewById(R.id.faast_prime_sign_up);
 
@@ -81,12 +83,14 @@ public class FaastPrime extends AppCompatActivity {
 
         if(serviceName[0].equals("SMB")){
             FAASTPrimePriceTextview.setText("* Prime membership costs Rs.1000 + Taxes yearly.");
+            message = "Are you sure, You will be charged Rs.1000 + taxes annually for the FAAST Prime Membership, once activated, Prime subscription cannot be cancelled for the current year.";
         }
 
         faastPrimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                check_connection_mode(UserName);
+                System.out.println(planName);
+                check_nextsrvid(planName);
             }
         });
     }
@@ -167,6 +171,91 @@ public class FaastPrime extends AppCompatActivity {
         return false;
     }
 
+
+    private void check_nextsrvid(final String srvname) {
+
+        class CheckNextSrvidAsync extends AsyncTask<String, Void, String> {
+
+            private Dialog loadingDialog;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                loadingDialog = createProgressDialog(FaastPrime.this);
+                loadingDialog.show();
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                String srvname = params[0];
+
+                InputStream is = null;
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("srvname", srvname));
+                String result = null;
+
+                try {
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    HttpPost httpPost = new HttpPost(
+                            checkNextSrvidURL);
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse response = httpClient.execute(httpPost);
+
+                    HttpEntity entity = response.getEntity();
+
+                    is = entity.getContent();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"), 8);
+                    StringBuilder sb = new StringBuilder();
+
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                        Log.d("Output=", line);
+                    }
+                    result = sb.toString();
+                } catch (ClientProtocolException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                loadingDialog.dismiss();
+                String s = result.trim();
+                System.out.println(s);
+                if (s.equalsIgnoreCase("success")) {
+                    check_connection_mode(UserName);
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(FaastPrime.this);
+                    // Set the Alert Dialog Message
+                    builder.setMessage("Prime membership is currently not applicable for your current plan.")
+                            .setCancelable(false)
+                            .setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog,
+                                                            int id) {
+                                            // Restart the Activity
+                                           dialog.dismiss();
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            }
+        }
+        CheckNextSrvidAsync la = new CheckNextSrvidAsync();
+        la.execute(srvname);
+    }
+
     private void check_connection_mode(final String username) {
 
         class CheckConnectionModeAsync extends AsyncTask<String, Void, String> {
@@ -227,7 +316,20 @@ public class FaastPrime extends AppCompatActivity {
                 String s = result.trim();
                 System.out.println(s);
                 if (s.equalsIgnoreCase("fiber")) {
-                    activate_faast_prime(UserName);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(FaastPrime.this);
+                    alertDialog.setMessage(message);
+                    alertDialog.setIcon(R.mipmap.arrow_white);
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int which) {
+                            activate_faast_prime(UserName);
+                        }
+                    });
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 }
                 else {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(FaastPrime.this);
@@ -235,8 +337,20 @@ public class FaastPrime extends AppCompatActivity {
                     alertDialog.setIcon(R.mipmap.arrow_white);
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,int which) {
-                            activate_faast_prime(UserName);
-                        }
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(FaastPrime.this);
+                            alertDialog.setMessage(message);
+                            alertDialog.setIcon(R.mipmap.arrow_white);
+                            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int which) {
+                                    activate_faast_prime(UserName);
+                                }
+                            });
+                            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            alertDialog.show();                        }
                     });
                     alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -314,7 +428,7 @@ public class FaastPrime extends AppCompatActivity {
                 if (s.equalsIgnoreCase("success")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(FaastPrime.this);
                     // Set the Alert Dialog Message
-                    builder.setMessage("Your FAAST Prime membership request has been activated successfully")
+                    builder.setMessage("Congratulations, your FAAST Prime membership request has been activated successfully")
                             .setCancelable(false)
                             .setPositiveButton("OK",
                                     new DialogInterface.OnClickListener() {
@@ -335,7 +449,6 @@ public class FaastPrime extends AppCompatActivity {
                 }
             }
         }
-
         FaastPrimeAsync la = new FaastPrimeAsync();
         la.execute(username);
     }

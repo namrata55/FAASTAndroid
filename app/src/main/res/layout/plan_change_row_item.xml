@@ -23,14 +23,14 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:layout_weight="1"/>
+            android:layout_weight="1.2"/>
 
         <TextView
             android:id="@+id/price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Price"
-            android:layout_weight="1"
+            android:layout_weight=".8"
             android:gravity="right"
             android:textColor="@android:color/white" />
     </LinearLayout>

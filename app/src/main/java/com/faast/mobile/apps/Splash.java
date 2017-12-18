@@ -27,11 +27,12 @@ public class Splash extends AppCompatActivity {
     SessionManager manager;
     TextView version_num;
     String versionName;
+
     String msg=null;
-//          String server_path="http://rm.faast.in/ucp/android_ucp1/";
+      String server_path="http://rm.faast.in/ucp/android_ucp1/";
 //      String server_path="http://rm.faast.in/ucp/android_ucp_demo/";
 //      String server_path="http://192.168.1.17/hotspot_android/";
-    String server_path="http://10.0.2.2:81/android_faast_db/";
+//    String server_path="http://10.0.2.2:81/android_faast_db/";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     String token;
 
@@ -91,6 +92,7 @@ public class Splash extends AppCompatActivity {
         editor.putString("imagesliderurl",server_path+"get_images.php");
         editor.putString("requestforreactivationurl",server_path+"request_for_reactivation.php");
         editor.putString("checkconnectionmodeurl",server_path+"check_connection_mode.php");
+        editor.putString("checknextsrvidforfaastprimeurl",server_path+"check_nextsrvid_for_faast_prime.php");
         editor.commit();
 
         SharedPreferences razorpay = getApplicationContext().getSharedPreferences("RazorpayKeysDetails", MODE_PRIVATE);

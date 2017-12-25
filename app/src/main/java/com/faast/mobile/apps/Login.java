@@ -770,8 +770,15 @@ private BroadcastReceiver mRegistrationBroadcastReceiver = new BroadcastReceiver
             i.putExtra("firstname",firstname);
             i.putExtra("mobile",mobile);
             i.putExtra("email",email);
+            finish();
             startActivity(i);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
     }
 }
 

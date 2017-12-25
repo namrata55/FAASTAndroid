@@ -294,7 +294,12 @@ public class UsageActivity extends AppCompatActivity {
         Intent i = new Intent(UsageActivity.this,HomeInternetStatus.class);
         startActivity(i);
     }
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
     }
+}
 
 
 

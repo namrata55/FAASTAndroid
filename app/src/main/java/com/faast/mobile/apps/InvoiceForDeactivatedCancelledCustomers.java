@@ -911,6 +911,11 @@ public class InvoiceForDeactivatedCancelledCustomers extends AppCompatActivity {
         return dialog;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
 }
 
 

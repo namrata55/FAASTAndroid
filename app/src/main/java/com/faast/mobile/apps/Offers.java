@@ -62,5 +62,9 @@ public class Offers extends AppCompatActivity {
             finishAffinity();
         }
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
 }

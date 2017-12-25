@@ -41,6 +41,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -427,7 +428,9 @@ public class HomeInternetStatus extends AppCompatActivity
                                 }
                             });
             AlertDialog alert = builder111.create();
-            alert.show();
+            if(!isFinishing()) {
+                alert.show();
+            }
         }
     }
 
@@ -547,7 +550,9 @@ public class HomeInternetStatus extends AppCompatActivity
                                     }
                                 });
                 AlertDialog alert = builder.create();
-                alert.show();
+                if(!isFinishing()) {
+                    alert.show();
+                }
             }
         }
     };
@@ -786,14 +791,17 @@ public class HomeInternetStatus extends AppCompatActivity
                                                     });
                                             //Creating dialog box
                                             AlertDialog AccountStatusAlert = AccountStatusAlertBox.create();
-                                            AccountStatusAlert.show();
+                                            if(!isFinishing()) {
+                                                AccountStatusAlert.show();
+                                            }
                                         }
                                     }
                                 });
                         //Creating dialog box
                         NotificationAlertBox = BuilderNotification.create();
-                        NotificationAlertBox.show();
-
+                        if(!isFinishing()) {
+                            NotificationAlertBox.show();
+                        }
                     }
                     else{
                         if(accountStatus.equals("0")){
@@ -813,7 +821,9 @@ public class HomeInternetStatus extends AppCompatActivity
                                     });
                             //Creating dialog box
                             AlertDialog AccountStatusAlert = AccountStatusAlertBox.create();
-                            AccountStatusAlert.show();
+                            if(!isFinishing()) {
+                                AccountStatusAlert.show();
+                            }
                         }
                         else{
                             GetVersionCode getVersionCode=new GetVersionCode();
@@ -833,6 +843,7 @@ public class HomeInternetStatus extends AppCompatActivity
     {
         if(dm.equals("0.0"))
         {
+                faastPrimeAlert();
 
         }
         else
@@ -849,6 +860,7 @@ public class HomeInternetStatus extends AppCompatActivity
                                 public void onClick(DialogInterface dialog,
                                                     int id) {
                                     dialog.dismiss();
+                                    faastPrimeAlert();
                                 }
                             })
                     .setPositiveButton("Pay", new DialogInterface.OnClickListener() {
@@ -865,6 +877,46 @@ public class HomeInternetStatus extends AppCompatActivity
             AccountStatusAlert.show();
         }
     }
+
+
+    public void faastPrimeAlert(){
+
+        if (faast_prime_member_status.equals("0")) {
+
+            final Dialog dialog = new Dialog(HomeInternetStatus.this);
+            dialog.setContentView(R.layout.faast_prime_dialog);
+
+//        ImageView image= (ImageView) view.findViewById(R.id.imageView);
+//        image.setImageResource(R.mipmap.mbps100);
+
+            Button faastPrimeButton = (Button) dialog.findViewById(R.id.signup);
+            faastPrimeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view1) {
+                    dialog.dismiss();
+                    Intent faastprime = new Intent(HomeInternetStatus.this, FaastPrime.class);
+                    faastprime.putExtra("faastprime_member_request", faast_prime_member_request);
+                    startActivity(faastprime);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }
+            });
+
+            Button faastPrimeCancel = (Button) dialog.findViewById(R.id.cancel);
+            faastPrimeCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }
+        else{
+
+        }
+
+    }
+
 
     //-----------------------------CUSTOM ADAPTER FOR HOME MENUS GRIDS----------------------------------
 

@@ -29,10 +29,10 @@ public class Splash extends AppCompatActivity {
     String versionName;
 
     String msg=null;
-      String server_path="http://rm.faast.in/ucp/android_ucp1/";
+//      String server_path="http://rm.faast.in/ucp/android_ucp1/";
 //      String server_path="http://rm.faast.in/ucp/android_ucp_demo/";
 //      String server_path="http://192.168.1.17/hotspot_android/";
-//    String server_path="http://10.0.2.2:81/android_faast_db/";
+    String server_path="http://10.0.2.2:81/android_faast_db/";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     String token;
 

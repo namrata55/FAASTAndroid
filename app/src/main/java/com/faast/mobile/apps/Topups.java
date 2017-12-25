@@ -500,5 +500,10 @@ public class Topups extends AppCompatActivity {
             }
         }
     };
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
 
 }

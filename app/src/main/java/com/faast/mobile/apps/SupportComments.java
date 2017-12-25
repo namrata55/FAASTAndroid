@@ -302,5 +302,9 @@ public class SupportComments extends AppCompatActivity {
         // dialog.setMessage(Message);
         return dialog;
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
 }

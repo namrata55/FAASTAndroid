@@ -66,4 +66,9 @@ public class LogOut extends AppCompatActivity {
         }, 1000);
 
     }
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
 }

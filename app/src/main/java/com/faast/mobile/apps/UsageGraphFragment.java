@@ -263,4 +263,9 @@ public class UsageGraphFragment extends Fragment {
         // dialog.setMessage(Message);
         return dialog;
     }
+    @Override
+    public void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
 }

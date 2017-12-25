@@ -85,7 +85,7 @@ public class SupportTickets extends AppCompatActivity {
                 });
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        dialog.dismiss();
                         AlertDialog.Builder builder111 = new AlertDialog.Builder(SupportTickets.this);
                         builder111.setMessage("Kindly perform the speed test by going to www.speedtest.net on a laptop while being connected to the Router directly via the LAN cable.")
                                 .setCancelable(false)
@@ -93,14 +93,18 @@ public class SupportTickets extends AppCompatActivity {
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog,
                                                                 int id) {
-                                                dialog.cancel();
+                                                dialog.dismiss();
                                             }
                                         });
                         AlertDialog alert = builder111.create();
-                        alert.show();
+                        if(!isFinishing()) {
+                            alert.show();
+                        }
                     }
                 });
-                alertDialog.show();
+                if(!isFinishing()) {
+                    alertDialog.show();
+                }
             }
         });
 
@@ -120,6 +124,7 @@ public class SupportTickets extends AppCompatActivity {
 
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                         AlertDialog.Builder builder111 = new AlertDialog.Builder(SupportTickets.this);
                         builder111.setMessage("Kindly verify the ON/OFF switch behind the fiber modem and also the power socket by connecting any other device like mobile phone charger.")
                                 .setCancelable(false)
@@ -127,16 +132,18 @@ public class SupportTickets extends AppCompatActivity {
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog,
                                                                 int id) {
-                                                dialog.cancel();
+                                                dialog.dismiss();
                                             }
                                         });
                         AlertDialog alert = builder111.create();
-                        alert.show();
-
+                        if(!isFinishing()) {
+                            alert.show();
+                        }
                     }
                 });
-
-                alertDialog.show();
+                if(!isFinishing()) {
+                    alertDialog.show();
+                }
             }
         });
 
@@ -155,7 +162,7 @@ public class SupportTickets extends AppCompatActivity {
                 });
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        dialog.dismiss();
                         AlertDialog.Builder builder111 = new AlertDialog.Builder(SupportTickets.this);
                         // Set the Alert Dialog Message
                         builder111.setMessage("Kindly try restarting your Fiber modem once.")
@@ -165,14 +172,18 @@ public class SupportTickets extends AppCompatActivity {
                                             public void onClick(DialogInterface dialog,
                                                                 int id) {
                                                 // Restart the Activity
-                                                dialog.cancel();
+                                                dialog.dismiss();
                                             }
                                         });
                         AlertDialog alert = builder111.create();
-                        alert.show();
+                        if(!isFinishing()) {
+                            alert.show();
+                        }
                     }
                 });
-                alertDialog.show();
+                if(!isFinishing()) {
+                    alertDialog.show();
+                }
             }
         });
 
@@ -190,6 +201,7 @@ public class SupportTickets extends AppCompatActivity {
                 });
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                         AlertDialog.Builder builder111 = new AlertDialog.Builder(SupportTickets.this);
                         // Set the Alert Dialog Message
                         builder111.setMessage("Kindly try shifting to a different socket and check for lights.")
@@ -199,11 +211,13 @@ public class SupportTickets extends AppCompatActivity {
                                             public void onClick(DialogInterface dialog,
                                                                 int id) {
                                                 // Restart the Activity
-                                                dialog.cancel();
+                                                dialog.dismiss();
                                             }
                                         });
                         AlertDialog alert = builder111.create();
-                        alert.show();
+                        if(!isFinishing()) {
+                            alert.show();
+                        }
                     }
                 });
                 alertDialog.show();
@@ -315,7 +329,9 @@ public class SupportTickets extends AppCompatActivity {
                                         }
                                     });
                     AlertDialog alert = builder111.create();
-                    alert.show();
+                    if(!isFinishing()) {
+                        alert.show();
+                    }
                 }
                 else{
                     Toast toast = Toast.makeText(getApplicationContext(),"Ticket is not created, please try once again.", Toast.LENGTH_SHORT);
@@ -416,8 +432,15 @@ public class SupportTickets extends AppCompatActivity {
                                     }
                                 });
                 AlertDialog alert = builder.create();
-                alert.show();
+                if(!isFinishing()) {
+                    alert.show();
+                }
             }
         }
     };
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
 }

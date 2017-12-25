@@ -306,6 +306,11 @@ public class ForgotPassword extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
 }
 
 

@@ -31,5 +31,5 @@
     <string name="title_activity_hotspot_home">HotspotHome</string>
     <string name="title_activity_deactivated_cancelled_user_login">DeactivatedCancelledUserLogin
     </string>
-
+    <string name="faast_prime_dialog"> <u>FAAST PRIME MEMBERSHIP</u></string>
 </resources>

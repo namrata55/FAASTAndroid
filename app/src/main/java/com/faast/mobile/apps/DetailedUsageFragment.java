@@ -411,5 +411,11 @@ public class DetailedUsageFragment extends Fragment {
             }
         }
     };
+    @Override
+    public void onSaveInstanceState(Bundle oldInstanceState) {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
+
 
 }

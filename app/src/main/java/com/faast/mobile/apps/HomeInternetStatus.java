@@ -874,7 +874,9 @@ public class HomeInternetStatus extends AppCompatActivity
                     });
             //Creating dialog box
             AlertDialog AccountStatusAlert = AccountStatusAlertBox.create();
-            AccountStatusAlert.show();
+            if(!isFinishing()) {
+                AccountStatusAlert.show();
+            }
         }
     }
 
@@ -885,7 +887,7 @@ public class HomeInternetStatus extends AppCompatActivity
 
             final Dialog dialog = new Dialog(HomeInternetStatus.this);
             dialog.setContentView(R.layout.faast_prime_dialog);
-
+            dialog.setCancelable(false);
 //        ImageView image= (ImageView) view.findViewById(R.id.imageView);
 //        image.setImageResource(R.mipmap.mbps100);
 
@@ -908,8 +910,9 @@ public class HomeInternetStatus extends AppCompatActivity
                     dialog.dismiss();
                 }
             });
-
-            dialog.show();
+            if(!isFinishing()) {
+                dialog.show();
+            }
         }
         else{
 
@@ -1387,7 +1390,9 @@ options.put("prefill", new JSONObject("{email: '"+emailP+"',contact: '"+mobileP+
                     });
                     //Creating dialog box
                     alertUpdate = builderUpdate.create();
-                    alertUpdate.show();
+                    if(!isFinishing()){
+                        alertUpdate.show();
+                    }
 
                     alertUpdate.setOnKeyListener(new DialogInterface.OnKeyListener() {
 

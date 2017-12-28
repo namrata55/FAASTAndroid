@@ -39,10 +39,10 @@
         </activity>
 
         <!-- &lt;!&ndash; Add your API key here &ndash;&gt; -->
-         <!--<meta-data-->
-         <!--android:name="com.razorpay.ApiKey"-->
-         <!--android:value="rzp_test_uDpwVNvR5hvR9N"-->
-         <!--/>-->
+        <!-- <meta-data -->
+        <!-- android:name="com.razorpay.ApiKey" -->
+        <!-- android:value="rzp_test_uDpwVNvR5hvR9N" -->
+        <!-- /> -->
 
         <meta-data
             android:name="com.razorpay.ApiKey"
@@ -191,9 +191,8 @@
             android:name=".FaastPrime"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".InvoiceForDeactivatedCancelledCustomers"></activity>
+        <activity android:name=".InvoiceForDeactivatedCancelledCustomers" />
+        <activity android:name=".FaastWallet"></activity>
     </application>
 
-</manifest>
-
-    <!--android:name=".MyApplication"-->
+</manifest> <!-- android:name=".MyApplication" -->

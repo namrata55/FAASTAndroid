@@ -97,8 +97,8 @@ public class HomeInternetStatus extends AppCompatActivity
     static public String dd="";
     static public String dm="";
     GridView gv;
-    public static String[] menu_list = {"Payment", "Unpaid Invoices", "Usage", "TopUps", "Password", "Support"};
-    public static int[] menu_images = {R.mipmap.online_payment1, R.mipmap.payment, R.mipmap.usage_report, R.mipmap.topups_green, R.mipmap.change_password2, R.mipmap.support11};
+    public static String[] menu_list = {"Wallet", "Unpaid Invoices", "Usage", "TopUps", "Password", "Support"};
+    public static int[] menu_images = {R.mipmap.wallet, R.mipmap.payment, R.mipmap.usage_report, R.mipmap.topups_green, R.mipmap.change_password2, R.mipmap.support11};
     TextView srvname_textview, due_date_textview, due_amount_textview, graph_value;
     String FirstName, mobile, UserName;
     private Activity mActivity;
@@ -123,7 +123,7 @@ public class HomeInternetStatus extends AppCompatActivity
     private static final String TAG_MOBILE1= "mobile";
     private static final String TAG_STATUS1= "account_status";
     private static final String TAG_ACC_TYPE= "account_type";
-    private static final String TAG_FLAG_FAAST_PRIME= "flag_for_faast_prime";
+    private static final String TAG_NON_GOKAK_MEMBERS= "flag_for_faast_prime";
     private static final String TAG_FAAST_PRIME_STATUS= "faast_prime_member";
     private static final String TAG_FAAST_PRIME_REQUEST= "faast_prime_request";
     private static final String TAG_DUEAMOUNT = "due_amount";
@@ -140,6 +140,7 @@ public class HomeInternetStatus extends AppCompatActivity
     String rzChargeURL;
     String imageSliderURL;
     Double ssizedouble;
+    String value,updateinv;
 
     String  RazorpayKeyId,RazorpayKeySecret;
 
@@ -155,8 +156,6 @@ public class HomeInternetStatus extends AppCompatActivity
     String Screensinch;
 
     TextView current_plan_lable,due_amount_lable,due_date_lable;
-
-
     //Navigation Bar
     TextView nav_username;
 
@@ -172,7 +171,6 @@ public class HomeInternetStatus extends AppCompatActivity
     AlertDialog NotificationAlertBox;
 
     String accountStatus,accountType;
-    String value,updateinv;
 
 //    public static final String BROADCAST = "com.faast.mobile.apps.android.action.mConnReceiver";
 
@@ -180,7 +178,7 @@ public class HomeInternetStatus extends AppCompatActivity
     private ViewFlipper mViewFlipper1;
     com.android.volley.RequestQueue rq1;
     List<String> sliderImg1;
-
+    String non_gokak_member;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -319,7 +317,7 @@ public class HomeInternetStatus extends AppCompatActivity
                     imageView1.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     // Where we will place the image
                     Ion.with(imageView1)
-//                            .placeholder(R.mipmap.loader)
+                            .placeholder(R.mipmap.slide2)
                             .load(getNextImage1());
 
                     mViewFlipper1.addView(imageView1); // Adding the image to the flipper
@@ -623,7 +621,7 @@ public class HomeInternetStatus extends AppCompatActivity
                         String email = c.getString(TAG_EMAIL1);
                         String acc_status = c.getString(TAG_STATUS1);
                         String acc_type = c.getString(TAG_ACC_TYPE);
-                        String flag_faast_prime = c.getString(TAG_FLAG_FAAST_PRIME);
+                        String flag_faast_prime = c.getString(TAG_NON_GOKAK_MEMBERS);
                         String faast_prime_member_status = c.getString(TAG_FAAST_PRIME_STATUS);
                         String faast_prime_member_request = c.getString(TAG_FAAST_PRIME_REQUEST);
                         String due_date = c.getString(TAG_DUEDATE);
@@ -641,7 +639,7 @@ public class HomeInternetStatus extends AppCompatActivity
                         map.put(TAG_MOBILE1, mobile);
                         map.put(TAG_STATUS1, acc_status);
                         map.put(TAG_ACC_TYPE, acc_type);
-                        map.put(TAG_FLAG_FAAST_PRIME, flag_faast_prime);
+                        map.put(TAG_NON_GOKAK_MEMBERS, flag_faast_prime);
                         map.put(TAG_FAAST_PRIME_STATUS, faast_prime_member_status);
                         map.put(TAG_FAAST_PRIME_REQUEST, faast_prime_member_request);
                         map.put(TAG_DUEDATE, due_date);
@@ -679,7 +677,7 @@ public class HomeInternetStatus extends AppCompatActivity
                 final String total_data = map.get(TAG_TOTALDATA1);
                 final String mobile = map.get(TAG_MOBILE1);
                 final String email = map.get(TAG_EMAIL1);
-                final String flag_faast_prime = map.get(TAG_FLAG_FAAST_PRIME);
+                non_gokak_member = map.get(TAG_NON_GOKAK_MEMBERS);
                 faast_prime_member_status = map.get(TAG_FAAST_PRIME_STATUS);
                 faast_prime_member_request = map.get(TAG_FAAST_PRIME_REQUEST);
                 accountStatus = map.get(TAG_STATUS1);
@@ -719,7 +717,7 @@ public class HomeInternetStatus extends AppCompatActivity
                     View header = navigationView.getHeaderView(0);
                     nav_username = (TextView) header.findViewById(R.id.nav_bar_email);
                     nav_username.setText("    Hello! " + firstname);
-                    if(!flag_faast_prime.equals("1"))
+                    if(!non_gokak_member.equals("1"))
                     {
                         MenuItem item = navigationView.getMenu().getItem(1);
                         item.setVisible(false);
@@ -883,7 +881,7 @@ public class HomeInternetStatus extends AppCompatActivity
 
     public void faastPrimeAlert(){
 
-        if (faast_prime_member_status.equals("0")) {
+        if (faast_prime_member_status.equals("0") && non_gokak_member.equals("1")) {
 
             final Dialog dialog = new Dialog(HomeInternetStatus.this);
             dialog.setContentView(R.layout.faast_prime_dialog);

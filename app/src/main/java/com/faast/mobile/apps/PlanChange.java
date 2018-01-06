@@ -498,19 +498,39 @@ public class PlanChange extends AppCompatActivity {
                     toast.show();
                 }
                 else if (s.equalsIgnoreCase("failureone"))  {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(PlanChange.this,R.style.MyDialogTheme);
-                    builder.setIcon(R.mipmap.arrow_white);
-                    builder.setTitle("FAAST");
-                    builder.setMessage("Kindly wait for the current billing cycle to complete.")
+
+
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(PlanChange.this);
+                    //Uncomment the below code to Set the message and title from the strings.xml file
+                    //builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
+
+                    //Setting message manually and performing action on button click
+                    builder1.setMessage("Kindly wait for the current billing cycle to complete.")
                             .setCancelable(false)
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
+                                   dialog.dismiss();
                                 }
                             });
+                    //Creating dialog box
+                    AlertDialog alert1 = builder1.create();
+                    //Setting the title manually
+                    //alert.setTitle("AlertDialogExample");
+                    alert1.show();
 
-                    AlertDialog alert = builder.create();
-                    alert.show();
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(PlanChange.this,R.style.MyDialogTheme);
+//                    builder.setIcon(R.mipmap.arrow_white);
+//                    builder.setTitle("FAAST");
+//                    builder.setMessage("Kindly wait for the current billing cycle to complete.")
+//                            .setCancelable(false)
+//                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//
+//                    AlertDialog alert = builder.create();
+//                    alert.show();
 
                 }
                 else if (s.equalsIgnoreCase("failuretwo"))  {
@@ -531,19 +551,38 @@ public class PlanChange extends AppCompatActivity {
                 }
 
                 else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(PlanChange.this,R.style.MyDialogTheme);
-                    builder.setIcon(R.mipmap.arrow_white);
-                    builder.setTitle("FAAST");
-                    builder.setMessage("kindly wait for the current billing cycle to complete.")
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(PlanChange.this,R.style.MyDialogTheme);
+//                    builder.setIcon(R.mipmap.arrow_white);
+//                    builder.setTitle("FAAST");
+//                    builder.setMessage("kindly wait for the current billing cycle to complete.")
+//                            .setCancelable(false)
+//                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//
+//                    AlertDialog alert = builder.create();
+//                    alert.show();
+
+
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(PlanChange.this);
+                    //Uncomment the below code to Set the message and title from the strings.xml file
+                    //builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
+
+                    //Setting message manually and performing action on button click
+                    builder1.setMessage("Kindly wait for the current billing cycle to complete.")
                             .setCancelable(false)
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
+                                    dialog.dismiss();
                                 }
                             });
-
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                    //Creating dialog box
+                    AlertDialog alert1 = builder1.create();
+                    //Setting the title manually
+                    //alert.setTitle("AlertDialogExample");
+                    alert1.show();
                 }
             }
         }

@@ -93,6 +93,7 @@ public class Splash extends AppCompatActivity {
         editor.putString("requestforreactivationurl",server_path+"request_for_reactivation.php");
         editor.putString("checkconnectionmodeurl",server_path+"check_connection_mode.php");
         editor.putString("checknextsrvidforfaastprimeurl",server_path+"check_nextsrvid_for_faast_prime.php");
+        editor.putString("walletamount",server_path+"get_wallet_amount.php");
         editor.commit();
 
         SharedPreferences razorpay = getApplicationContext().getSharedPreferences("RazorpayKeysDetails", MODE_PRIVATE);

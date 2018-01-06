@@ -2,6 +2,7 @@ package com.faast.mobile.apps;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -22,7 +24,9 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -32,6 +36,8 @@ import android.widget.Toast;
 
 import com.razorpay.Checkout;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +49,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -54,28 +61,45 @@ public class Invoices extends AppCompatActivity {
     public TableLayout tl;
     TableRow tr;
     TextView InvNumTextView;
-    Double TotalBill=0.0;
+    Double TotalBill = 0.0;
     Button inv_pay_button;
-    String FirstNameP,emailP,mobileP;
+    String FirstNameP, emailP, mobileP;
 
-    String FirstName,mobile,email,UserName;
+    String FirstName, mobile, email, UserName;
     Integer Final_Amount;
     String s;
-    String value,updateinv;
+    String value, updateinv;
     String razorpayPaymentID1;
-    String  RazorpayKeyId,RazorpayKeySecret;
-
-    Integer i,i1,uv,uv1;
+    String RazorpayKeyId, RazorpayKeySecret;
+    String walletAmountUrl;
+    Integer i, i1, uv, uv1;
     Integer amt1;
     String invoiceURL;
     String rzChargeURL;
     String updateInvoiceURL;
 
+    JSONParser jsonParser1 = new JSONParser();
+    ArrayList<HashMap<String, String>> profileList1 = new ArrayList<HashMap<String, String>>();
+    JSONArray matchFixture1 = null;
+
+    private static final String TAG_RESULT = "result";
+    private static final String TAG_PRODUCTS = "output";
+    private static final String TAG_WALLET_BALANCE = "balance";
+    String wallet_balance;
+    Double wallet_amount;
+    Double outstanding_amount;
+    CheckBox availaibleWalletBalanceCheckBox;
+    TextView payBalanceTextView;
+    String totalBillString;
+    TextView walletBalanceTextView;
+    String walletBalanceString;
+    NumberFormat formatter2 ;
+            String zero_in_rupee;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.invoices);
-        inv_pay_button = (Button)findViewById(R.id.invoice_pay);
+        inv_pay_button = (Button) findViewById(R.id.invoice_pay);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00ba30")));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Invoices");
@@ -86,24 +110,27 @@ public class Invoices extends AppCompatActivity {
         }
 
         SharedPreferences Links = this.getSharedPreferences("DatabaseLinks", MODE_PRIVATE);
-        invoiceURL = Links.getString("unpaidinvoices","");
-        rzChargeURL = Links.getString("rzcharge","");
-        updateInvoiceURL = Links.getString("updateinvoice","");
+        invoiceURL = Links.getString("unpaidinvoices", "");
+        rzChargeURL = Links.getString("rzcharge", "");
+        updateInvoiceURL = Links.getString("updateinvoice", "");
+        walletAmountUrl = Links.getString("walletamount", "");
 
-        SharedPreferences myPrefs = this.getSharedPreferences("contacts",MODE_PRIVATE);
-        UserName = myPrefs.getString("Username","");
+        SharedPreferences myPrefs = this.getSharedPreferences("contacts", MODE_PRIVATE);
+        UserName = myPrefs.getString("Username", "");
 
-        SharedPreferences myPrefs1 = this.getSharedPreferences("UserDetails",MODE_PRIVATE);
-        FirstName = myPrefs1.getString("firstname","");
-        mobile = myPrefs1.getString("mobile","");
-        email = myPrefs1.getString("email","");
+        SharedPreferences myPrefs1 = this.getSharedPreferences("UserDetails", MODE_PRIVATE);
+        FirstName = myPrefs1.getString("firstname", "");
+        mobile = myPrefs1.getString("mobile", "");
+        email = myPrefs1.getString("email", "");
 
         tl = (TableLayout) findViewById(R.id.maintable);
+
+
 
         final GetInvoices getdb = new GetInvoices();
         new Thread(new Runnable() {
             public void run() {
-                data = getdb.getDataFromDb(UserName,invoiceURL);
+                data = getdb.getDataFromDb(UserName, invoiceURL);
 
                 runOnUiThread(new Runnable() {
 
@@ -111,7 +138,7 @@ public class Invoices extends AppCompatActivity {
                     public void run() {
                         ArrayList<Users> users = parseJSON(data);
                         addData(users);
-                        System.out.println("Output:"+users);
+                        System.out.println("Output:" + users);
                     }
                 });
 
@@ -127,18 +154,50 @@ public class Invoices extends AppCompatActivity {
                 inv_pay_button.setClickable(false);
                 inv_pay_button.setBackgroundColor(Color.parseColor("#7fd8dc"));
 
-                if(TotalBill > 0.0)
-                {
-                    Toast.makeText(Invoices.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
+                if (TotalBill > 0.0) {
+                    Toast.makeText(Invoices.this, "Processing Payment, Please wait…", Toast.LENGTH_SHORT).show();
                     startPayment(TotalBill);
-                }
-                else {
-                    Toast.makeText(Invoices.this,"Invalid Amount",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(Invoices.this, "Invalid Amount", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
+        availaibleWalletBalanceCheckBox = (CheckBox) findViewById(R.id.use_availaible_wallet_balance);
+
+        payBalanceTextView = (TextView) findViewById(R.id.pay_balance);
+        walletBalanceTextView = (TextView) findViewById(R.id.wallet_Amount);
+
+        formatter2 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+        zero_in_rupee = formatter2.format(0.00);
+
+        availaibleWalletBalanceCheckBox.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (((CheckBox) v).isChecked()) {
+
+                    if(outstanding_amount<wallet_amount){
+                        payBalanceTextView.setText(zero_in_rupee);
+                        walletBalanceTextView.setText(totalBillString);
+                    }
+                   else {
+                        Double finalAmountToBePaid = outstanding_amount - wallet_amount;
+                        NumberFormat formatter3 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+                        String finalAmountToBePaidString = formatter3.format(finalAmountToBePaid);
+                        payBalanceTextView.setText(finalAmountToBePaidString);
+                        walletBalanceTextView.setText(walletBalanceString);
+                    }
+                }
+                else{
+                    walletBalanceTextView.setText(zero_in_rupee);
+                    payBalanceTextView.setText(totalBillString);
+                }
+            }
+        });
     }
+
     //-----------------------------PARSE JSON----------------------------------
 
     public ArrayList<Users> parseJSON(String result) {
@@ -161,7 +220,7 @@ public class Invoices extends AppCompatActivity {
         return users;
     }
 
-    void addHeader(){
+    void addHeader() {
         /** Create a TableRow dynamically **/
 
         tr = new TableRow(this);
@@ -174,14 +233,14 @@ public class Invoices extends AppCompatActivity {
         InvNumTextView.setBackgroundColor(Color.parseColor("#00b1ba"));
         InvNumTextView.setTextColor(Color.parseColor("#FFFFFF"));
         InvNumTextView.setGravity(Gravity.CENTER);
-        InvNumTextView.setPadding(7,7,7,7);
+        InvNumTextView.setPadding(7, 7, 7, 7);
         InvNumTextView.setGravity(Gravity.CENTER);
         InvNumTextView.setWidth(30);
         LinearLayout Ll = new LinearLayout(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
                 LayoutParams.WRAP_CONTENT);
-        Ll.addView(InvNumTextView,params);
-        tr.addView((View)Ll); // Adding textView to tablerow.
+        Ll.addView(InvNumTextView, params);
+        tr.addView((View) Ll); // Adding textView to tablerow.
 
         TextView id = new TextView(this);
         id.setText("Inv Date");
@@ -193,14 +252,15 @@ public class Invoices extends AppCompatActivity {
         id.setGravity(Gravity.CENTER);
         id.setWidth(30);
 
-        id.setPadding(7,7,7,7);;
+        id.setPadding(7, 7, 7, 7);
+        ;
         id.setGravity(Gravity.CENTER);
 
         LinearLayout L3 = new LinearLayout(this);
         params = new LinearLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT);
-        L3.addView(id,params);
-        tr.addView((View)L3); // Adding textview to tablerow.
+        L3.addView(id, params);
+        tr.addView((View) L3); // Adding textview to tablerow.
 
         TextView duedate = new TextView(this);
         duedate.setText("Due Date");
@@ -209,14 +269,14 @@ public class Invoices extends AppCompatActivity {
         duedate.setBackgroundColor(Color.parseColor("#00b1ba"));
         duedate.setTextColor(Color.parseColor("#FFFFFF"));
 
-        duedate.setPadding(7,7,7,7);
+        duedate.setPadding(7, 7, 7, 7);
         duedate.setGravity(Gravity.CENTER);
 
         Ll = new LinearLayout(this);
         params = new LinearLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT);
-        Ll.addView(duedate,params);
-        tr.addView((View)Ll); // Adding textview to tablerow.
+        Ll.addView(duedate, params);
+        tr.addView((View) Ll); // Adding textview to tablerow.
 
         // Add the TableRow to the TableLayout
 
@@ -228,14 +288,14 @@ public class Invoices extends AppCompatActivity {
         balance.setBackgroundColor(Color.parseColor("#00b1ba"));
         balance.setTextColor(Color.parseColor("#FFFFFF"));
 
-        balance.setPadding(7,7,7,7);
+        balance.setPadding(7, 7, 7, 7);
         balance.setGravity(Gravity.CENTER);
 
         Ll = new LinearLayout(this);
         params = new LinearLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT);
-        Ll.addView(balance,params);
-        tr.addView((View)Ll); // Adding textview to tablerow.
+        Ll.addView(balance, params);
+        tr.addView((View) Ll); // Adding textview to tablerow.
 
         // Add the TableRow to the TableLayout
         tl.addView(tr, new TableLayout.LayoutParams(
@@ -243,7 +303,7 @@ public class Invoices extends AppCompatActivity {
                 TableLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    void addFooter(Double totalbill){
+    void addFooter(Double totalbill) {
         /** Create a TableRow dynamically **/
         tr = new TableRow(this);
 
@@ -261,8 +321,8 @@ public class Invoices extends AppCompatActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
                 LayoutParams.WRAP_CONTENT);
 
-        Ll.addView(InvNumTextView,params);
-        tr.addView((View)Ll); // Adding textView to tablerow.
+        Ll.addView(InvNumTextView, params);
+        tr.addView((View) Ll); // Adding textView to tablerow.
 
         TextView id = new TextView(this);
         id.setText("");
@@ -277,8 +337,8 @@ public class Invoices extends AppCompatActivity {
         params = new LinearLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT);
 
-        L3.addView(id,params);
-        tr.addView((View)L3); // Adding textview to tablerow.
+        L3.addView(id, params);
+        tr.addView((View) L3); // Adding textview to tablerow.
 
         TextView duedate = new TextView(this);
         duedate.setText("Total Due");
@@ -292,8 +352,8 @@ public class Invoices extends AppCompatActivity {
         Ll = new LinearLayout(this);
         params = new LinearLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT);
-        Ll.addView(duedate,params);
-        tr.addView((View)Ll); // Adding textview to tablerow.
+        Ll.addView(duedate, params);
+        tr.addView((View) Ll); // Adding textview to tablerow.
 
         // Add the TableRow to the TableLayout
 
@@ -302,7 +362,7 @@ public class Invoices extends AppCompatActivity {
         String moneyString = formatter.format(totalbill);
 
         TextView balance = new TextView(this);
-        balance.setText(moneyString+"  ");
+        balance.setText(moneyString + "  ");
         balance.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
         balance.setBackgroundColor(Color.parseColor("#00b1ba"));
@@ -314,14 +374,13 @@ public class Invoices extends AppCompatActivity {
         params = new LinearLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT);
 
-        Ll.addView(balance,params);
-        tr.addView((View)Ll); // Adding textview to tablerow.
+        Ll.addView(balance, params);
+        tr.addView((View) Ll); // Adding textview to tablerow.
 
         // Add the TableRow to the TableLayout
         tl.addView(tr, new TableLayout.LayoutParams(
                 TableLayout.LayoutParams.FILL_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
-
     }
 
     public void addData(ArrayList<Users> users) {
@@ -383,13 +442,13 @@ public class Invoices extends AppCompatActivity {
             tr.addView((View) Ll); // Adding textview to tablerow.
 
             String price = p.getInvPrice();
-            Double price_double=Double.parseDouble(price);
+            Double price_double = Double.parseDouble(price);
             TotalBill = TotalBill + price_double;
             Format formatter = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
             String moneyString = formatter.format(price_double);
 
             TextView invamount = new TextView(this);
-            invamount.setText(moneyString+"  ");
+            invamount.setText(moneyString + "  ");
             invamount.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT));
             invamount.setBackground(getResources().getDrawable(
@@ -407,18 +466,17 @@ public class Invoices extends AppCompatActivity {
                     LayoutParams.WRAP_CONTENT));
         }
         addFooter(TotalBill);
+        GetWallet getWallet = new GetWallet();
+        getWallet.execute();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem)
-    {
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == android.R.id.home) {
-            Intent i = new Intent(Invoices.this,HomeInternetStatus.class);
+            Intent i = new Intent(Invoices.this, HomeInternetStatus.class);
             startActivity(i);
             return false;
-        }
-        else
-        {
+        } else {
             onBackPressed();
             return true;
         }
@@ -433,18 +491,14 @@ public class Invoices extends AppCompatActivity {
 
     //-----------------------------DATE CONVERSION----------------------------------
 
-    public String getconvertdate1(String date)
-    {
+    public String getconvertdate1(String date) {
         DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
         inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date parsed = new Date();
-        try
-        {
+        try {
             parsed = inputFormat.parse(date);
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -488,7 +542,7 @@ public class Invoices extends AppCompatActivity {
 
     //-----------------------------RAZOR PAYMENT ----------------------------------
 
-    public void startPayment(Double Amount){
+    public void startPayment(Double Amount) {
         /**
          * Put your key id generated in Razorpay dashboard here
          */
@@ -497,10 +551,10 @@ public class Invoices extends AppCompatActivity {
         RazorpayKeyId = myPrefs.getString("razorpaykeyid", "");
         RazorpayKeySecret = myPrefs.getString("razorpaykeysecret", "");
 
-        SharedPreferences myPrefs1 = this.getSharedPreferences("UserDetails",MODE_PRIVATE);
-        FirstNameP = myPrefs1.getString("firstname","");
-        mobileP = myPrefs1.getString("mobile","");
-        emailP = myPrefs1.getString("email","");
+        SharedPreferences myPrefs1 = this.getSharedPreferences("UserDetails", MODE_PRIVATE);
+        FirstNameP = myPrefs1.getString("firstname", "");
+        mobileP = myPrefs1.getString("mobile", "");
+        emailP = myPrefs1.getString("email", "");
         Checkout razorpayCheckout = new Checkout();
         razorpayCheckout.setKeyID(RazorpayKeyId);
 
@@ -518,11 +572,11 @@ public class Invoices extends AppCompatActivity {
         Long L = Math.round(d);
         int i = Integer.valueOf(L.intValue());
         Final_Amount = Integer.valueOf(L.intValue());
-        amt1 = Final_Amount*100;
+        amt1 = Final_Amount * 100;
 
         Activity activity = this;
 
-        try{
+        try {
             JSONObject options = new JSONObject("{" +
                     "description: '<purchase description>'," +
                     "currency: 'INR'}"
@@ -534,77 +588,73 @@ public class Invoices extends AppCompatActivity {
              *
              * options.put("image", "<link to image>");
              */
-            Integer amt = Final_Amount*100;
+            Integer amt = Final_Amount * 100;
             options.put("amount", amt);
             options.put("name", FirstNameP);
-            options.put("prefill", new JSONObject("{email: '"+emailP+"',contact: '"+mobileP+"',name: '"+FirstNameP+"'}"));
+            options.put("prefill", new JSONObject("{email: '" + emailP + "',contact: '" + mobileP + "',name: '" + FirstNameP + "'}"));
             options.put("theme", new JSONObject("{color: '#00ba30'}"));
 
             razorpayCheckout.open(activity, options);
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void onPaymentSuccess(String razorpayPaymentID){
+    public void onPaymentSuccess(String razorpayPaymentID) {
 
         try {
-            s=String.valueOf(amt1);
-            razorpayPaymentID1=razorpayPaymentID;
+            s = String.valueOf(amt1);
+            razorpayPaymentID1 = razorpayPaymentID;
             final GetData getdb = new GetData();
 
             new Thread(new Runnable() {
                 public void run() {
 
-                    System.out.println("RazorpayKeyId="+RazorpayKeyId);
-                    System.out.println("RazorpayKeySecret="+RazorpayKeySecret);
-                    System.out.println("s="+s);
-                    System.out.println("razorpayPaymentID1="+razorpayPaymentID1);
-                    System.out.println("rzChargeURL="+rzChargeURL);
-                    value= getdb.getData(RazorpayKeyId,RazorpayKeySecret,s,razorpayPaymentID1,rzChargeURL);
+                    System.out.println("RazorpayKeyId=" + RazorpayKeyId);
+                    System.out.println("RazorpayKeySecret=" + RazorpayKeySecret);
+                    System.out.println("s=" + s);
+                    System.out.println("razorpayPaymentID1=" + razorpayPaymentID1);
+                    System.out.println("rzChargeURL=" + rzChargeURL);
+                    value = getdb.getData(RazorpayKeyId, RazorpayKeySecret, s, razorpayPaymentID1, rzChargeURL);
 
-                    System.out.println("Response=="+value);
-                    i=new Integer(value);
-                    i1=i.intValue();
+                    System.out.println("Response==" + value);
+                    i = new Integer(value);
+                    i1 = i.intValue();
 
                     runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
-                            if(i1 == 1)
-                            {
+                            if (i1 == 1) {
                                 final UpdateInvoice ui = new UpdateInvoice();
 
                                 new Thread(new Runnable() {
                                     public void run() {
-                                        updateinv= ui.updateInvoice(UserName,razorpayPaymentID1,updateInvoiceURL);
+                                        updateinv = ui.updateInvoice(UserName, razorpayPaymentID1, updateInvoiceURL);
 
                                         System.out.println(updateinv);
-                                        uv=new Integer(value);
-                                        uv1=uv.intValue();
+                                        uv = new Integer(value);
+                                        uv1 = uv.intValue();
 
                                         runOnUiThread(new Runnable() {
 
                                             @Override
                                             public void run() {
-                                                if(updateinv.equalsIgnoreCase("success"))
-                                                {
+                                                if (updateinv.equalsIgnoreCase("success")) {
                                                     Toast.makeText(getApplicationContext(), "Payment Successful", Toast.LENGTH_LONG).show();
 //                                                    setContentView(R.layout.paymentrz);
 //                                                    final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 //                                                    actionBar.hide();
-                                                    Intent i=new Intent(Invoices.this,HomeInternetStatus.class);
+                                                    Intent i = new Intent(Invoices.this, HomeInternetStatus.class);
                                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     finish();
                                                     finishAffinity();
                                                     startActivity(i);
-                                                }
-                                                else
-                                                {
+                                                } else {
                                                     Toast.makeText(getApplicationContext(), "Payment Successful", Toast.LENGTH_LONG).show();
-                                                    Intent i=new Intent(getApplicationContext(),HomeInternetStatus.class);
+                                                    Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
                                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     finish();
@@ -617,11 +667,9 @@ public class Invoices extends AppCompatActivity {
                                     }
                                 }).start();
 
-                            }
-                            else
-                            {
+                            } else {
                                 Toast.makeText(getApplicationContext(), "Payment UnSuccessful", Toast.LENGTH_LONG).show();
-                                Intent i=new Intent(getApplicationContext(),HomeInternetStatus.class);
+                                Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 finish();
@@ -634,23 +682,14 @@ public class Invoices extends AppCompatActivity {
                 }
             }).start();
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.e("com.merchant", e.getMessage(), e);
         }
     }
 
     public void onPaymentError(int code, String response) {
         try {
-
-//            Toast.makeText(this, "Payment failed: " + Integer.toString(code) + " " + response, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "Payment Cancelled", Toast.LENGTH_SHORT).show();
-//            Intent i=new Intent(this,PaymentUnsuccessfull.class);
-//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            finishAffinity();
-//            startActivity(i);
-
         } catch (Exception e) {
             Log.e("com.merchant", e.getMessage(), e);
         }
@@ -680,8 +719,7 @@ public class Invoices extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         this.unregisterReceiver(mConnReceiver);
-        if(isApplicationSentToBackground(this))
-        {
+        if (isApplicationSentToBackground(this)) {
             finishAffinity();
         }
     }
@@ -697,10 +735,134 @@ public class Invoices extends AppCompatActivity {
         }
         return false;
     }
+
     @Override
     protected void onSaveInstanceState(Bundle oldInstanceState) {
         super.onSaveInstanceState(oldInstanceState);
         oldInstanceState.clear();
+    }
+
+
+    public static ProgressDialog createProgressDialog(Context mContext) {
+        ProgressDialog dialog = new ProgressDialog(mContext);
+        try {
+            dialog.show();
+        } catch (WindowManager.BadTokenException e) {
+
+        }
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.progress_dialogue);
+        // dialog.setMessage(Message);
+        return dialog;
+    }
+
+    class GetWallet extends AsyncTask<String, String, String> {
+        private ProgressDialog pDialog1;
+        boolean failure = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog1 = createProgressDialog(Invoices.this);
+            pDialog1.show();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            // TODO Auto-generated method stub
+            String success;
+
+            try {
+                Log.d("try", "in the try");
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                params.add(new BasicNameValuePair("username", UserName));
+                JSONObject json = jsonParser1.makeHttpRequest(
+                        walletAmountUrl, "POST", params);
+                Log.d("jsonObject", "new json Object");
+
+                matchFixture1 = json.getJSONArray(TAG_PRODUCTS);
+                JSONObject c1 = matchFixture1.getJSONObject(0);
+                success = c1.getString(TAG_RESULT);
+                if (success.equals("1")) {
+
+                    for (int i = 0; i < matchFixture1.length(); i++) {
+                        System.out.println(matchFixture1);
+
+                        JSONObject c = matchFixture1.getJSONObject(i);
+
+                        String wallet_balance = c.getString(TAG_WALLET_BALANCE);
+
+                        HashMap<String, String> map = new HashMap<String, String>();
+
+                        // adding each child node to HashMap key => value
+                        map.put(TAG_WALLET_BALANCE, wallet_balance);
+
+                        // adding HashList to ArrayList
+                        profileList1.add(map);
+                    }
+                } else if (success.equals("0")) {
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            System.out.print(result);
+            if (pDialog1 != null && pDialog1.isShowing()) {
+                pDialog1.dismiss();
+            }
+
+            for (HashMap<String, String> map : profileList1) {
+                wallet_balance = map.get(TAG_WALLET_BALANCE);
+            }
+            Log.i("Wallet balance==", wallet_balance);
+
+            if (wallet_balance.equals("0.00")) {
+                LinearLayout mainLayout = (LinearLayout) findViewById(R.id.wallet_layout);
+                mainLayout.setVisibility(mainLayout.INVISIBLE);
+            } else {
+
+                wallet_amount = Double.valueOf(wallet_balance).doubleValue();
+                NumberFormat formatter1 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+                walletBalanceString = formatter1.format(wallet_amount);
+
+                String availaibleBalanceString = "(Availaible Balance " + walletBalanceString + ")";
+                TextView availaibleWalletBalanceTextView = (TextView) findViewById(R.id.availaible_wallet_balance);
+                availaibleWalletBalanceTextView.setText(availaibleBalanceString);
+
+                outstanding_amount = Double.valueOf(TotalBill).doubleValue();
+                NumberFormat formatter2 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+                totalBillString = formatter2.format(outstanding_amount);
+
+                System.out.println("wallet Balance String"+walletBalanceString);
+                System.out.println("Total bill "+TotalBill);
+
+                TextView amountToBePaidTextView = (TextView) findViewById(R.id.amount_to_be_paid);
+                amountToBePaidTextView.setText(totalBillString);
+
+                if(outstanding_amount < wallet_amount){
+                    walletBalanceTextView.setText(totalBillString);
+                    payBalanceTextView.setText(zero_in_rupee);
+                }
+                else {
+                    walletBalanceTextView.setText(walletBalanceString);
+                    Double finalAmountToBePaid = outstanding_amount - wallet_amount;
+                    NumberFormat formatter3 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+                    String finalAmountToBePaidString = formatter3.format(finalAmountToBePaid);
+                    payBalanceTextView.setText(finalAmountToBePaidString);
+                }
+
+
+            }
+
+        }
+
     }
 }
 

@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -58,6 +60,11 @@ public class FaastPrime extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00ba30")));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("FAAST Prime");
+        Window window = FaastPrime.this.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(FaastPrime.this.getResources().getColor(R.color.my_statusbar_color));
+        }
+
         FAASTPrimePriceTextview = (TextView) findViewById(R.id.FAASTPrimePrice);
         SharedPreferences myPrefs = this.getSharedPreferences("contacts", MODE_PRIVATE);
         UserName = myPrefs.getString("Username", "");

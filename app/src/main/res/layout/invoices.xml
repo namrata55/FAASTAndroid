@@ -1,32 +1,207 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/invoiceLayout"
-    xmlns:ripple="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical"
+    android:weightSum="11">
 
-    <ScrollView
-        android:id="@+id/invoice_table"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars  ="none"
-        >
-        <TableLayout android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:stretchColumns="*"
-            android:id="@+id/maintable" >
-        </TableLayout>
-    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/invoiceLayout"
+        android:layout_weight="7.6">
+        <ScrollView
+            android:id="@+id/invoice_table"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars  ="none"
+            >
+            <TableLayout android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:stretchColumns="*"
+                android:id="@+id/maintable" >
+            </TableLayout>
+        </ScrollView>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/invoice_pay"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:background="@drawable/button_pressed"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/wallet_layout"
+        android:orientation="vertical"
+        android:layout_weight="2.5">
+    <LinearLayout
+        android:weightSum="2"
         android:layout_weight="1"
-        android:text="Pay Now"
-        android:textColor="#FFFFFF"
-        android:layout_alignParentBottom="true"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:text="Total amout to be paid"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/amount_to_be_paid"
+            android:layout_width="0dp"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content"
+            android:layout_weight=".8"
+            android:gravity="right"
+            android:text="Rs. 600"
+            tools:layout_editor_absoluteX="179dp"
+            tools:layout_editor_absoluteY="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:weightSum="2"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        >
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:weightSum="2"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            >
+            <CheckBox
+                android:id="@+id/use_availaible_wallet_balance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_weight="1.2"
+                android:text="Use FAAST Wallet" />
+
+            <TextView
+                android:id="@+id/wallet_Amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".8"
+                android:gravity="right"
+                android:textColor="@color/black"
+                android:text="Rs. 200" />
+        </LinearLayout>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:weightSum="2"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            >
+
+            <TextView
+                android:id="@+id/availaible_wallet_balance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="(Availaible balance Rs. 202)" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight=".03"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/gray"
+        android:gravity="center"/>
+    <LinearLayout
+        android:weightSum="2"
+        android:layout_weight=".5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:text="Pay Balance"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/pay_balance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".8"
+            android:gravity="right"
+            android:text="Rs. 400"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="179dp"
+            tools:layout_editor_absoluteY="16dp" />
+    </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/invoice_pay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/faast_blue"
+            android:gravity="center"
+            android:text="PAY NOW"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/invoiceLayout"-->
+    <!--xmlns:ripple="http://schemas.android.com/apk/res-auto">-->
+
+    <!--<ScrollView-->
+        <!--android:id="@+id/invoice_table"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:fillViewport="true"-->
+        <!--android:scrollbars  ="none"-->
+        <!--&gt;-->
+        <!--<TableLayout android:layout_width="wrap_content"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:stretchColumns="*"-->
+            <!--android:id="@+id/maintable" >-->
+        <!--</TableLayout>-->
+    <!--</ScrollView>-->
+
+    <!--<Button-->
+        <!--android:id="@+id/invoice_pay"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:background="@drawable/button_pressed"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Pay Now"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--/>-->
+
+<!--</RelativeLayout>-->

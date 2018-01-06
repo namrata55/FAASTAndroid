@@ -462,9 +462,10 @@ private BroadcastReceiver mRegistrationBroadcastReceiver = new BroadcastReceiver
             @Override
             protected void onPostExecute(String result) {
                 loadingDialog.dismiss();
-                loginResponse = result.trim();
-                System.out.println(loginResponse);
-
+                if (result!= null) {
+                    loginResponse = result.trim();
+                    System.out.println(loginResponse);
+                }
                 SharedPreferences myPrefs = getApplicationContext().getSharedPreferences("contacts", MODE_PRIVATE);
                 SharedPreferences.Editor editor = myPrefs.edit();
                 editor.putString("Username",username);

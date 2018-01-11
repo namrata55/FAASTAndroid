@@ -98,7 +98,7 @@ public class HomeInternetStatus extends AppCompatActivity
     static public String dm="";
     GridView gv;
     public static String[] menu_list = {"Wallet", "Unpaid Invoices", "Usage", "TopUps", "Password", "Support"};
-    public static int[] menu_images = {R.mipmap.wallet, R.mipmap.payment, R.mipmap.usage_report, R.mipmap.topups_green, R.mipmap.change_password2, R.mipmap.support11};
+    public static int[] menu_images = {R.mipmap.wallet2, R.mipmap.payment, R.mipmap.usage_report, R.mipmap.topups_green, R.mipmap.change_password2, R.mipmap.support11};
     TextView srvname_textview, due_date_textview, due_amount_textview, graph_value;
     String FirstName, mobile, UserName;
     private Activity mActivity;
@@ -982,17 +982,19 @@ public class HomeInternetStatus extends AppCompatActivity
                     // Toast.makeText(context, "You Clicked "+result[position], Toast.LENGTH_LONG).show();
                     if(position == 0)
                     {
-                        if(dm.equals("0.0"))
-                        {
-                            Toast.makeText(getApplicationContext(),"No Outstanding Amount",Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Checkout.preload(getApplicationContext());
-                            Total_amount = Double.parseDouble(dm);
-                            Toast.makeText(HomeInternetStatus.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
-                            startPayment(Total_amount);
-                        }
+//                        if(dm.equals("0.0"))
+//                        {
+//                            Toast.makeText(getApplicationContext(),"No Outstanding Amount",Toast.LENGTH_SHORT).show();
+//                        }
+//                        else
+//                        {
+//                            Checkout.preload(getApplicationContext());
+//                            Total_amount = Double.parseDouble(dm);
+//                            Toast.makeText(HomeInternetStatus.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
+//                            startPayment(Total_amount);
+                            Intent walletIntent = new Intent(HomeInternetStatus.this,Wallet.class);
+                            startActivity(walletIntent);
+//                        }
                     }
                     else if(position == 1)
                     {
@@ -1225,7 +1227,7 @@ options.put("prefill", new JSONObject("{email: '"+emailP+"',contact: '"+mobileP+
 
                                 new Thread(new Runnable() {
                                     public void run() {
-                                        updateinv= ui.updateInvoice(UserName,razorpayPaymentID1,updateInvoiceURL);
+                                        updateinv= ui.updateInvoice(UserName,razorpayPaymentID1,updateInvoiceURL,"Online");
 
                                         System.out.println("upadted invoice:"+updateinv);
                                         uv=new Integer(value);

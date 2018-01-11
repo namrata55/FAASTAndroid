@@ -38,15 +38,14 @@
             </intent-filter>
         </activity>
 
-        <!-- &lt;!&ndash; Add your API key here &ndash;&gt; -->
-        <!-- <meta-data -->
-        <!-- android:name="com.razorpay.ApiKey" -->
-        <!-- android:value="rzp_test_uDpwVNvR5hvR9N" -->
-        <!-- /> -->
-
+        <!-- Add your API key here -->
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_live_yjf2wTSV05B9Fq" />
+            android:value="rzp_test_uDpwVNvR5hvR9N" />
+
+        <!-- <meta-data -->
+        <!-- android:name="com.razorpay.ApiKey" -->
+        <!-- android:value="rzp_live_yjf2wTSV05B9Fq" /> -->
 
         <activity
             android:name="com.razorpay.CheckoutActivity"
@@ -192,7 +191,8 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity android:name=".InvoiceForDeactivatedCancelledCustomers" />
-        <activity android:name=".FaastWallet"></activity>
+        <activity android:name=".FaastWallet" />
+        <activity android:name=".Wallet"></activity>
     </application>
 
 </manifest> <!-- android:name=".MyApplication" -->

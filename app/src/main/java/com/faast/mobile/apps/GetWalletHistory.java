@@ -12,9 +12,9 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateInvoice {
+public class GetWalletHistory {
 
-    public String updateInvoice(String USERNAME,String paymentid,String URL,String remark) {
+    public String getWalletHistory(String USERNAME,String URL) {
         try {
 
             HttpPost httppost;
@@ -22,16 +22,16 @@ public class UpdateInvoice {
             httpclient = new DefaultHttpClient();
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             nameValuePairs.add(new BasicNameValuePair("username", USERNAME));
-            nameValuePairs.add(new BasicNameValuePair("paymentid", paymentid));
-//
-//            httppost = new HttpPost(
-//                    "http://10.0.2.2/android_faast_db/updateinvoice.php"); // change this to your URL.....
 
-            httppost = new HttpPost(URL);
+//            httppost = new HttpPost(
+//                    "http://10.0.2.2/android_faast_db/GetInvoices.php"); // change this to your URL.....
+
+            httppost = new HttpPost(
+                    URL);
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             final String response = httpclient.execute(httppost,responseHandler);
-            System.out.println("Output from invoices=="+response.trim());
+            System.out.println(response.trim());
 
             return response.trim();
 

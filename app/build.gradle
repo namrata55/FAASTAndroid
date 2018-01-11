@@ -46,7 +46,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.razorpay:checkout:1.4.0'
+    compile('com.razorpay:checkout:1.4.5')
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -63,6 +63,7 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
 }
+
 
 
 

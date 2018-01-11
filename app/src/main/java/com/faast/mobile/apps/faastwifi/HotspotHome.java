@@ -807,7 +807,7 @@ public class HotspotHome extends AppCompatActivity
 
                                 new Thread(new Runnable() {
                                     public void run() {
-                                        updateinv= ui.updateInvoice(UserName,razorpayPaymentID1,updateInvoiceURL);
+                                        updateinv= ui.updateInvoice(UserName,razorpayPaymentID1,updateInvoiceURL,"Online");
 
                                         System.out.println("upadted invoice:"+updateinv);
                                         uv=new Integer(value);

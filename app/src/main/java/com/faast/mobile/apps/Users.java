@@ -22,6 +22,33 @@ public class Users {
     String usagestartdate,usagesessiontime,consumeddata,usagegrandtotal,usagestopdate;
     String ticketId,ticketSubject,ticketStatus,ticketCreation,ticketComment,supportTicketId;
 
+    String wallerCredit,walletDebit,walletBalance,walletDate;
+
+    public String getWallerCredit() {
+        return wallerCredit;
+    }
+    public void setWallerCredit(String wallerCredit) {
+        this.wallerCredit = wallerCredit;
+    }
+    public String getWalletDebit() {
+            return walletDebit;
+    }
+    public void setWalletDebit(String walletDebit) {
+        this.walletDebit = walletDebit;
+    }
+    public String getWalletBalance() {
+        return walletBalance;
+    }
+    public void setWalletBalance(String walletBalance) {
+        this.walletBalance = walletBalance;
+    }
+    public String getWalletDate() {
+        return walletDate;
+    }
+    public void setWalletDate(String walletDate) {
+        this.walletDate = walletDate;
+    }
+
     public void setSupportTicketId(String supportTicketId) {
         this.supportTicketId = supportTicketId;
     }

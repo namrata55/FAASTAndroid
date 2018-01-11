@@ -31,8 +31,8 @@ public class Splash extends AppCompatActivity {
     String msg=null;
 //      String server_path="http://rm.faast.in/ucp/android_ucp1/";
 //      String server_path="http://rm.faast.in/ucp/android_ucp_demo/";
-//      String server_path="http://192.168.1.17/hotspot_android/";
-    String server_path="http://10.0.2.2:81/android_faast_db/";
+      String server_path="http://192.168.1.17/hotspot_android/";
+//    String server_path="http://10.0.2.2:81/android_faast_db/";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     String token;
 
@@ -40,11 +40,11 @@ public class Splash extends AppCompatActivity {
     WifiInfo wInfo;
     String macAddress;
 
-    final String razorpay_key_id = "rzp_live_yjf2wTSV05B9Fq";
-    final String razorpay_key_secret = "hbjVhO5y7rbpapfk5cAGEtEJ";
+//    final String razorpay_key_id = "rzp_live_yjf2wTSV05B9Fq";
+//    final String razorpay_key_secret = "hbjVhO5y7rbpapfk5cAGEtEJ";
 
-//    final String razorpay_key_id = "rzp_test_uDpwVNvR5hvR9N";
-//    final String razorpay_key_secret = "aYyJ1mipvXYX0RVfYKX2LCVH";
+    final String razorpay_key_id = "rzp_test_uDpwVNvR5hvR9N";
+    final String razorpay_key_secret = "aYyJ1mipvXYX0RVfYKX2LCVH";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +94,8 @@ public class Splash extends AppCompatActivity {
         editor.putString("checkconnectionmodeurl",server_path+"check_connection_mode.php");
         editor.putString("checknextsrvidforfaastprimeurl",server_path+"check_nextsrvid_for_faast_prime.php");
         editor.putString("walletamount",server_path+"get_wallet_amount.php");
+        editor.putString("updatewalletamount",server_path+"update_wallet_amount.php");
+        editor.putString("getwallethistory",server_path+"get_wallet_history.php");
         editor.commit();
 
         SharedPreferences razorpay = getApplicationContext().getSharedPreferences("RazorpayKeysDetails", MODE_PRIVATE);

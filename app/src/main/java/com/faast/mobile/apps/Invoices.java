@@ -68,7 +68,7 @@ public class Invoices extends AppCompatActivity {
     String FirstName, mobile, email, UserName;
     Integer Final_Amount;
     String s;
-    String value, updateinv;
+    String value, updateinv,updatewallet;
     String razorpayPaymentID1;
     String RazorpayKeyId, RazorpayKeySecret;
     String walletAmountUrl;
@@ -77,6 +77,7 @@ public class Invoices extends AppCompatActivity {
     String invoiceURL;
     String rzChargeURL;
     String updateInvoiceURL;
+    String updateWalletURL;
 
     JSONParser jsonParser1 = new JSONParser();
     ArrayList<HashMap<String, String>> profileList1 = new ArrayList<HashMap<String, String>>();
@@ -93,8 +94,11 @@ public class Invoices extends AppCompatActivity {
     String totalBillString;
     TextView walletBalanceTextView;
     String walletBalanceString;
-    NumberFormat formatter2 ;
-            String zero_in_rupee;
+    NumberFormat formatter2;
+    String zero_in_rupee;
+    String invnums;
+    LinearLayout mainLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +118,7 @@ public class Invoices extends AppCompatActivity {
         rzChargeURL = Links.getString("rzcharge", "");
         updateInvoiceURL = Links.getString("updateinvoice", "");
         walletAmountUrl = Links.getString("walletamount", "");
+        updateWalletURL = Links.getString("updatewalletamount", "");
 
         SharedPreferences myPrefs = this.getSharedPreferences("contacts", MODE_PRIVATE);
         UserName = myPrefs.getString("Username", "");
@@ -124,7 +129,7 @@ public class Invoices extends AppCompatActivity {
         email = myPrefs1.getString("email", "");
 
         tl = (TableLayout) findViewById(R.id.maintable);
-
+         mainLayout = (LinearLayout) findViewById(R.id.wallet_layout);
 
 
         final GetInvoices getdb = new GetInvoices();
@@ -138,15 +143,16 @@ public class Invoices extends AppCompatActivity {
                     public void run() {
                         ArrayList<Users> users = parseJSON(data);
                         addData(users);
-                        System.out.println("Output:" + users);
+//                        System.out.println("Output:" + users);
                     }
                 });
-
             }
         }).start();
+
         inv_pay_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("invnums="+invnums);
 
                 Checkout.preload(getApplicationContext());
 
@@ -154,12 +160,107 @@ public class Invoices extends AppCompatActivity {
                 inv_pay_button.setClickable(false);
                 inv_pay_button.setBackgroundColor(Color.parseColor("#7fd8dc"));
 
-                if (TotalBill > 0.0) {
-                    Toast.makeText(Invoices.this, "Processing Payment, Please wait…", Toast.LENGTH_SHORT).show();
-                    startPayment(TotalBill);
-                } else {
-                    Toast.makeText(Invoices.this, "Invalid Amount", Toast.LENGTH_LONG).show();
+                if(mainLayout.getVisibility() == View.VISIBLE){
+                    if (outstanding_amount > wallet_amount && ! availaibleWalletBalanceCheckBox.isChecked()){
+                        //if bill amount is greater than wallet amount and user does not want to use wallet amount
+                        startPayment(outstanding_amount);
+                    }
+                    else if (outstanding_amount > wallet_amount &&  availaibleWalletBalanceCheckBox.isChecked()) {
+                        //if bill amount is greater than wallet amount and user wants to use wallet amount
+                        Double amount_to_pay_by_razorpay = outstanding_amount - wallet_amount;
+                        startPayment(amount_to_pay_by_razorpay);
+                    }
+                    else if (outstanding_amount < wallet_amount &&  !availaibleWalletBalanceCheckBox.isChecked()) {
+                        //if bill amount is less than wallet amount and user  does not want to use wallet amount
+                        startPayment(outstanding_amount);
+                    }
+                    else if (outstanding_amount < wallet_amount &&  availaibleWalletBalanceCheckBox.isChecked()) {
+                        //if bill amount is less than wallet amount and user wants to use wallet amount
+
+                        //deduct amount form wallet
+                        final UpdateInvoice ui = new UpdateInvoice();
+
+                        new Thread(new Runnable() {
+                            public void run() {
+                                updateinv = ui.updateInvoice(UserName, "wallet", updateInvoiceURL , "Wallet");
+
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+
+                                        if (updateinv.equals("success")) {
+
+                                            final UpdateWallet uw = new UpdateWallet();
+
+                                            new Thread(new Runnable() {
+                                                public void run() {
+
+                                                    System.out.println("updateWalletURL= "+updateWalletURL);
+                                                    System.out.println("totalBillString= "+totalBillString);
+                                                    System.out.println("walletBalanceString= "+walletBalanceString);
+                                                    System.out.println("invnums= "+invnums);
+
+                                                    Double walletBalance = wallet_amount - outstanding_amount;
+                                                    updatewallet = uw.updateWallet(UserName, "throughwallet", updateWalletURL, "0.00",  String.valueOf(TotalBill), String.valueOf(walletBalance), invnums);
+
+                                                    runOnUiThread(new Runnable() {
+
+                                                        @Override
+                                                        public void run() {
+
+                                                            System.out.println("Update inv result= "+updateinv);
+
+                                                            if (updatewallet.equals("success")) {
+                                                                Toast.makeText(getApplicationContext(), "Payment Successful", Toast.LENGTH_LONG).show();
+                                                                Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
+                                                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                finish();
+                                                                finishAffinity();
+                                                                startActivity(i);
+
+                                                            } else {
+                                                                Toast.makeText(getApplicationContext(), "Payment Unsuccessful", Toast.LENGTH_LONG).show();
+                                                                Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
+                                                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                finish();
+                                                                finishAffinity();
+                                                                startActivity(i);
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            }).start();
+
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Payment Unsuccessful", Toast.LENGTH_LONG).show();
+                                            Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
+                                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            finish();
+                                            finishAffinity();
+                                            startActivity(i);
+                                        }
+                                    }
+                                });
+                            }
+                        }).start();
+                    }
+                    else {
+                        Toast.makeText(Invoices.this, "Invalid Amount", Toast.LENGTH_LONG).show();
+                    }
                 }
+                else{
+                    if (TotalBill > 0.0) {
+                        startPayment(TotalBill);
+                    }
+                    else{
+                        Toast.makeText(Invoices.this, "Invalid Amount", Toast.LENGTH_LONG).show();
+                    }
+                }
+
             }
         });
 
@@ -178,19 +279,17 @@ public class Invoices extends AppCompatActivity {
 
                 if (((CheckBox) v).isChecked()) {
 
-                    if(outstanding_amount<wallet_amount){
+                    if (outstanding_amount < wallet_amount) {
                         payBalanceTextView.setText(zero_in_rupee);
                         walletBalanceTextView.setText(totalBillString);
-                    }
-                   else {
+                    } else {
                         Double finalAmountToBePaid = outstanding_amount - wallet_amount;
                         NumberFormat formatter3 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
                         String finalAmountToBePaidString = formatter3.format(finalAmountToBePaid);
                         payBalanceTextView.setText(finalAmountToBePaidString);
                         walletBalanceTextView.setText(walletBalanceString);
                     }
-                }
-                else{
+                } else {
                     walletBalanceTextView.setText(zero_in_rupee);
                     payBalanceTextView.setText(totalBillString);
                 }
@@ -253,7 +352,6 @@ public class Invoices extends AppCompatActivity {
         id.setWidth(30);
 
         id.setPadding(7, 7, 7, 7);
-        ;
         id.setGravity(Gravity.CENTER);
 
         LinearLayout L3 = new LinearLayout(this);
@@ -397,6 +495,12 @@ public class Invoices extends AppCompatActivity {
             /** Creating a TextView to add to the row **/
             InvNumTextView = new TextView(this);
             InvNumTextView.setText(p.getInvNum());
+            if (invnums!= null){
+                invnums = invnums + "," + p.getInvNum();
+            }
+            else {
+                invnums = p.getInvNum();
+            }
 
             InvNumTextView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
@@ -540,9 +644,10 @@ public class Invoices extends AppCompatActivity {
         }
     };
 
-    //-----------------------------RAZOR PAYMENT ----------------------------------
 
-    public void startPayment(Double Amount) {
+//-----------------------------RAZOR PAYMENT ----------------------------------
+
+    public void startPayment(Double Amount){
         /**
          * Put your key id generated in Razorpay dashboard here
          */
@@ -551,10 +656,10 @@ public class Invoices extends AppCompatActivity {
         RazorpayKeyId = myPrefs.getString("razorpaykeyid", "");
         RazorpayKeySecret = myPrefs.getString("razorpaykeysecret", "");
 
-        SharedPreferences myPrefs1 = this.getSharedPreferences("UserDetails", MODE_PRIVATE);
-        FirstNameP = myPrefs1.getString("firstname", "");
-        mobileP = myPrefs1.getString("mobile", "");
-        emailP = myPrefs1.getString("email", "");
+        SharedPreferences myPrefs1 = this.getSharedPreferences("UserDetails",MODE_PRIVATE);
+        FirstNameP = myPrefs1.getString("firstname","");
+        mobileP = myPrefs1.getString("mobile","");
+        emailP = myPrefs1.getString("email","");
         Checkout razorpayCheckout = new Checkout();
         razorpayCheckout.setKeyID(RazorpayKeyId);
 
@@ -572,11 +677,11 @@ public class Invoices extends AppCompatActivity {
         Long L = Math.round(d);
         int i = Integer.valueOf(L.intValue());
         Final_Amount = Integer.valueOf(L.intValue());
-        amt1 = Final_Amount * 100;
+        amt1 = Final_Amount*100;
 
         Activity activity = this;
 
-        try {
+        try{
             JSONObject options = new JSONObject("{" +
                     "description: '<purchase description>'," +
                     "currency: 'INR'}"
@@ -588,73 +693,124 @@ public class Invoices extends AppCompatActivity {
              *
              * options.put("image", "<link to image>");
              */
-            Integer amt = Final_Amount * 100;
+            Integer amt = Final_Amount*100;
             options.put("amount", amt);
             options.put("name", FirstNameP);
-            options.put("prefill", new JSONObject("{email: '" + emailP + "',contact: '" + mobileP + "',name: '" + FirstNameP + "'}"));
+            options.put("prefill", new JSONObject("{email: '"+emailP+"',contact: '"+mobileP+"',name: '"+FirstNameP+"'}"));
             options.put("theme", new JSONObject("{color: '#00ba30'}"));
 
             razorpayCheckout.open(activity, options);
 
-        } catch (Exception e) {
+        } catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    public void onPaymentSuccess(String razorpayPaymentID) {
+    public void onPaymentSuccess(String razorpayPaymentID){
 
         try {
-            s = String.valueOf(amt1);
-            razorpayPaymentID1 = razorpayPaymentID;
+            s=String.valueOf(amt1);
+            razorpayPaymentID1=razorpayPaymentID;
             final GetData getdb = new GetData();
 
             new Thread(new Runnable() {
                 public void run() {
 
-                    System.out.println("RazorpayKeyId=" + RazorpayKeyId);
-                    System.out.println("RazorpayKeySecret=" + RazorpayKeySecret);
-                    System.out.println("s=" + s);
-                    System.out.println("razorpayPaymentID1=" + razorpayPaymentID1);
-                    System.out.println("rzChargeURL=" + rzChargeURL);
-                    value = getdb.getData(RazorpayKeyId, RazorpayKeySecret, s, razorpayPaymentID1, rzChargeURL);
+                    System.out.println("RazorpayKeyId="+RazorpayKeyId);
+                    System.out.println("RazorpayKeySecret="+RazorpayKeySecret);
+                    System.out.println("s="+s);
+                    System.out.println("razorpayPaymentID1="+razorpayPaymentID1);
+                    System.out.println("rzChargeURL="+rzChargeURL);
+                    value= getdb.getData(RazorpayKeyId,RazorpayKeySecret,s,razorpayPaymentID1,rzChargeURL);
 
-                    System.out.println("Response==" + value);
-                    i = new Integer(value);
-                    i1 = i.intValue();
+                    System.out.println("Response=="+value);
+                    i=new Integer(value);
+                    i1=i.intValue();
 
                     runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
-                            if (i1 == 1) {
+                            if(i1 == 1)
+                            {
                                 final UpdateInvoice ui = new UpdateInvoice();
 
                                 new Thread(new Runnable() {
                                     public void run() {
-                                        updateinv = ui.updateInvoice(UserName, razorpayPaymentID1, updateInvoiceURL);
+                                        updateinv= ui.updateInvoice(UserName,razorpayPaymentID1,updateInvoiceURL,"Online");
 
                                         System.out.println(updateinv);
-                                        uv = new Integer(value);
-                                        uv1 = uv.intValue();
+                                        uv=new Integer(value);
+                                        uv1=uv.intValue();
 
                                         runOnUiThread(new Runnable() {
 
                                             @Override
                                             public void run() {
-                                                if (updateinv.equalsIgnoreCase("success")) {
-                                                    Toast.makeText(getApplicationContext(), "Payment Successful", Toast.LENGTH_LONG).show();
+                                                if(updateinv.equalsIgnoreCase("success"))
+                                                {
+                                                    if(availaibleWalletBalanceCheckBox.isChecked()){
+
+                                                        final UpdateWallet uw = new UpdateWallet();
+
+                                                        new Thread(new Runnable() {
+                                                            public void run() {
+
+                                                                System.out.println("updateWalletURL= "+updateWalletURL);
+                                                                System.out.println("totalBillString= "+totalBillString);
+                                                                System.out.println("walletBalanceString= "+walletBalanceString);
+                                                                System.out.println("invnums= "+invnums);
+
+                                                                updatewallet = uw.updateWallet(UserName, "throughwallet", updateWalletURL, "0.00",  String.valueOf(wallet_amount), "0.00", invnums);
+
+                                                                runOnUiThread(new Runnable() {
+
+                                                                    @Override
+                                                                    public void run() {
+
+                                                                        System.out.println("Update inv result= "+updateinv);
+
+                                                                        if (updatewallet.equals("success")) {
+                                                                            Toast.makeText(getApplicationContext(), "Payment Successful", Toast.LENGTH_LONG).show();
+                                                                            Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
+                                                                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                            finish();
+                                                                            finishAffinity();
+                                                                            startActivity(i);
+
+                                                                        } else {
+                                                                            Toast.makeText(getApplicationContext(), "Payment Unsuccessful", Toast.LENGTH_LONG).show();
+                                                                            Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
+                                                                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                            finish();
+                                                                            finishAffinity();
+                                                                            startActivity(i);
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        }).start();
+
+                                                    }
+                                                    else {
+                                                        Toast.makeText(getApplicationContext(), "Payment Unsuccessful", Toast.LENGTH_LONG).show();
 //                                                    setContentView(R.layout.paymentrz);
 //                                                    final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 //                                                    actionBar.hide();
-                                                    Intent i = new Intent(Invoices.this, HomeInternetStatus.class);
-                                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                    finish();
-                                                    finishAffinity();
-                                                    startActivity(i);
-                                                } else {
+                                                        Intent i = new Intent(Invoices.this, HomeInternetStatus.class);
+                                                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        finish();
+                                                        finishAffinity();
+                                                        startActivity(i);
+                                                    }
+                                                }
+                                                else
+                                                {
                                                     Toast.makeText(getApplicationContext(), "Payment Successful", Toast.LENGTH_LONG).show();
-                                                    Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
+                                                    Intent i=new Intent(getApplicationContext(),HomeInternetStatus.class);
                                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     finish();
@@ -667,9 +823,11 @@ public class Invoices extends AppCompatActivity {
                                     }
                                 }).start();
 
-                            } else {
+                            }
+                            else
+                            {
                                 Toast.makeText(getApplicationContext(), "Payment UnSuccessful", Toast.LENGTH_LONG).show();
-                                Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
+                                Intent i=new Intent(getApplicationContext(),HomeInternetStatus.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 finish();
@@ -682,14 +840,23 @@ public class Invoices extends AppCompatActivity {
                 }
             }).start();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e){
             Log.e("com.merchant", e.getMessage(), e);
         }
     }
 
     public void onPaymentError(int code, String response) {
         try {
+
+//            Toast.makeText(this, "Payment failed: " + Integer.toString(code) + " " + response, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "Payment Cancelled", Toast.LENGTH_SHORT).show();
+//            Intent i=new Intent(this,PaymentUnsuccessfull.class);
+//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            finishAffinity();
+//            startActivity(i);
+
         } catch (Exception e) {
             Log.e("com.merchant", e.getMessage(), e);
         }
@@ -774,7 +941,7 @@ public class Invoices extends AppCompatActivity {
             String success;
 
             try {
-                Log.d("try", "in the try");
+//                Log.d("try", "in the try");
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
 
                 params.add(new BasicNameValuePair("username", UserName));
@@ -788,7 +955,7 @@ public class Invoices extends AppCompatActivity {
                 if (success.equals("1")) {
 
                     for (int i = 0; i < matchFixture1.length(); i++) {
-                        System.out.println(matchFixture1);
+//                        System.out.println(matchFixture1);
 
                         JSONObject c = matchFixture1.getJSONObject(i);
 
@@ -813,7 +980,7 @@ public class Invoices extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            System.out.print(result);
+//            System.out.print(result);
             if (pDialog1 != null && pDialog1.isShowing()) {
                 pDialog1.dismiss();
             }
@@ -821,10 +988,9 @@ public class Invoices extends AppCompatActivity {
             for (HashMap<String, String> map : profileList1) {
                 wallet_balance = map.get(TAG_WALLET_BALANCE);
             }
-            Log.i("Wallet balance==", wallet_balance);
+//            Log.i("Wallet balance==", wallet_balance);
 
             if (wallet_balance.equals("0.00")) {
-                LinearLayout mainLayout = (LinearLayout) findViewById(R.id.wallet_layout);
                 mainLayout.setVisibility(mainLayout.INVISIBLE);
             } else {
 
@@ -840,17 +1006,16 @@ public class Invoices extends AppCompatActivity {
                 NumberFormat formatter2 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
                 totalBillString = formatter2.format(outstanding_amount);
 
-                System.out.println("wallet Balance String"+walletBalanceString);
-                System.out.println("Total bill "+TotalBill);
+//                System.out.println("wallet Balance String" + walletBalanceString);
+//                System.out.println("Total bill " + TotalBill);
 
                 TextView amountToBePaidTextView = (TextView) findViewById(R.id.amount_to_be_paid);
                 amountToBePaidTextView.setText(totalBillString);
 
-                if(outstanding_amount < wallet_amount){
+                if (outstanding_amount < wallet_amount) {
                     walletBalanceTextView.setText(totalBillString);
                     payBalanceTextView.setText(zero_in_rupee);
-                }
-                else {
+                } else {
                     walletBalanceTextView.setText(walletBalanceString);
                     Double finalAmountToBePaid = outstanding_amount - wallet_amount;
                     NumberFormat formatter3 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));

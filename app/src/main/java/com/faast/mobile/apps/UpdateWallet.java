@@ -12,9 +12,9 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateInvoice {
+public class UpdateWallet {
 
-    public String updateInvoice(String USERNAME,String paymentid,String URL,String remark) {
+    public String updateWallet(String USERNAME,String paymentid,String URL,String credit,String debit,String balance,String invnum) {
         try {
 
             HttpPost httppost;
@@ -23,6 +23,10 @@ public class UpdateInvoice {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             nameValuePairs.add(new BasicNameValuePair("username", USERNAME));
             nameValuePairs.add(new BasicNameValuePair("paymentid", paymentid));
+            nameValuePairs.add(new BasicNameValuePair("credit", credit));
+            nameValuePairs.add(new BasicNameValuePair("debit", debit));
+            nameValuePairs.add(new BasicNameValuePair("balance", balance));
+            nameValuePairs.add(new BasicNameValuePair("invnum", invnum));
 //
 //            httppost = new HttpPost(
 //                    "http://10.0.2.2/android_faast_db/updateinvoice.php"); // change this to your URL.....
@@ -31,7 +35,7 @@ public class UpdateInvoice {
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             final String response = httpclient.execute(httppost,responseHandler);
-            System.out.println("Output from invoices=="+response.trim());
+            System.out.println("Output from wallet"+response.trim());
 
             return response.trim();
 

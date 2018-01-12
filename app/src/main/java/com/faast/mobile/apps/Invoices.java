@@ -163,18 +163,21 @@ public class Invoices extends AppCompatActivity {
                 if(mainLayout.getVisibility() == View.VISIBLE){
                     if (outstanding_amount > wallet_amount && ! availaibleWalletBalanceCheckBox.isChecked()){
                         //if bill amount is greater than wallet amount and user does not want to use wallet amount
+                        Toast.makeText(Invoices.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
                         startPayment(outstanding_amount);
                     }
                     else if (outstanding_amount > wallet_amount &&  availaibleWalletBalanceCheckBox.isChecked()) {
                         //if bill amount is greater than wallet amount and user wants to use wallet amount
                         Double amount_to_pay_by_razorpay = outstanding_amount - wallet_amount;
+                        Toast.makeText(Invoices.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
                         startPayment(amount_to_pay_by_razorpay);
                     }
                     else if (outstanding_amount < wallet_amount &&  !availaibleWalletBalanceCheckBox.isChecked()) {
                         //if bill amount is less than wallet amount and user  does not want to use wallet amount
+                        Toast.makeText(Invoices.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
                         startPayment(outstanding_amount);
                     }
-                    else if (outstanding_amount < wallet_amount &&  availaibleWalletBalanceCheckBox.isChecked()) {
+                    else if (outstanding_amount <= wallet_amount &&  availaibleWalletBalanceCheckBox.isChecked()) {
                         //if bill amount is less than wallet amount and user wants to use wallet amount
 
                         //deduct amount form wallet
@@ -182,7 +185,7 @@ public class Invoices extends AppCompatActivity {
 
                         new Thread(new Runnable() {
                             public void run() {
-                                updateinv = ui.updateInvoice(UserName, "wallet", updateInvoiceURL , "Wallet");
+                                updateinv = ui.updateInvoice(UserName, "", updateInvoiceURL , "Wallet");
 
                                 runOnUiThread(new Runnable() {
 
@@ -202,7 +205,7 @@ public class Invoices extends AppCompatActivity {
                                                     System.out.println("invnums= "+invnums);
 
                                                     Double walletBalance = wallet_amount - outstanding_amount;
-                                                    updatewallet = uw.updateWallet(UserName, "throughwallet", updateWalletURL, "0.00",  String.valueOf(TotalBill), String.valueOf(walletBalance), invnums);
+                                                    updatewallet = uw.updateWallet(UserName, "", updateWalletURL, "0.00",  String.valueOf(TotalBill), String.valueOf(walletBalance), invnums);
 
                                                     runOnUiThread(new Runnable() {
 
@@ -212,13 +215,27 @@ public class Invoices extends AppCompatActivity {
                                                             System.out.println("Update inv result= "+updateinv);
 
                                                             if (updatewallet.equals("success")) {
-                                                                Toast.makeText(getApplicationContext(), "Payment Successful", Toast.LENGTH_LONG).show();
-                                                                Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
-                                                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                finish();
-                                                                finishAffinity();
-                                                                startActivity(i);
+                                                                AlertDialog.Builder builder = new AlertDialog.Builder(Invoices.this);
+                                                                // Set the Alert Dialog Message
+                                                                builder.setMessage("Payment Successful")
+                                                                        .setCancelable(false)
+                                                                        .setPositiveButton("OK",
+                                                                                new DialogInterface.OnClickListener() {
+                                                                                    public void onClick(DialogInterface dialog,
+                                                                                                        int id) {
+                                                                                        // Restart the Activity
+                                                                                        dialog.cancel();
+                                                                                        Intent i = new Intent(getApplicationContext(), HomeInternetStatus.class);
+                                                                                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                                        finish();
+                                                                                        finishAffinity();
+                                                                                        startActivity(i);
+
+                                                                                    }
+                                                                                });
+                                                                AlertDialog alert = builder.create();
+                                                                alert.show();
 
                                                             } else {
                                                                 Toast.makeText(getApplicationContext(), "Payment Unsuccessful", Toast.LENGTH_LONG).show();
@@ -254,6 +271,7 @@ public class Invoices extends AppCompatActivity {
                 }
                 else{
                     if (TotalBill > 0.0) {
+                        Toast.makeText(Invoices.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
                         startPayment(TotalBill);
                     }
                     else{
@@ -749,7 +767,7 @@ public class Invoices extends AppCompatActivity {
                                             public void run() {
                                                 if(updateinv.equalsIgnoreCase("success"))
                                                 {
-                                                    if(availaibleWalletBalanceCheckBox.isChecked()){
+                                                    if(mainLayout.getVisibility()== View.VISIBLE && availaibleWalletBalanceCheckBox.isChecked()){
 
                                                         final UpdateWallet uw = new UpdateWallet();
 
@@ -761,7 +779,7 @@ public class Invoices extends AppCompatActivity {
                                                                 System.out.println("walletBalanceString= "+walletBalanceString);
                                                                 System.out.println("invnums= "+invnums);
 
-                                                                updatewallet = uw.updateWallet(UserName, "throughwallet", updateWalletURL, "0.00",  String.valueOf(wallet_amount), "0.00", invnums);
+                                                                updatewallet = uw.updateWallet(UserName, "", updateWalletURL, "0.00",  String.valueOf(wallet_amount), "0.00", invnums);
 
                                                                 runOnUiThread(new Runnable() {
 
@@ -988,12 +1006,12 @@ public class Invoices extends AppCompatActivity {
             for (HashMap<String, String> map : profileList1) {
                 wallet_balance = map.get(TAG_WALLET_BALANCE);
             }
-//            Log.i("Wallet balance==", wallet_balance);
+            System.out.println("Wallet balance=="+wallet_balance);
 
             if (wallet_balance.equals("0.00")) {
                 mainLayout.setVisibility(mainLayout.INVISIBLE);
             } else {
-
+                mainLayout.setVisibility(mainLayout.VISIBLE);
                 wallet_amount = Double.valueOf(wallet_balance).doubleValue();
                 NumberFormat formatter1 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
                 walletBalanceString = formatter1.format(wallet_amount);

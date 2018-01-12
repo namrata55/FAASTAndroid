@@ -23,6 +23,7 @@ public class UpdateInvoice {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             nameValuePairs.add(new BasicNameValuePair("username", USERNAME));
             nameValuePairs.add(new BasicNameValuePair("paymentid", paymentid));
+            nameValuePairs.add(new BasicNameValuePair("remark", remark));
 //
 //            httppost = new HttpPost(
 //                    "http://10.0.2.2/android_faast_db/updateinvoice.php"); // change this to your URL.....

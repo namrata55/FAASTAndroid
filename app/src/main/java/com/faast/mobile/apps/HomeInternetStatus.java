@@ -864,10 +864,8 @@ public class HomeInternetStatus extends AppCompatActivity
                     .setPositiveButton("Pay", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            Checkout.preload(getApplicationContext());
-                            Total_amount = Double.parseDouble(dm);
-                            Toast.makeText(HomeInternetStatus.this,"Processing Payment, Please wait…",Toast.LENGTH_SHORT).show();
-                            startPayment(Total_amount);
+                            Intent invoiceIntent =  new Intent(HomeInternetStatus.this,Invoices.class);
+                            startActivity(invoiceIntent);
                         }
                     });
             //Creating dialog box
@@ -1223,8 +1221,6 @@ options.put("prefill", new JSONObject("{email: '"+emailP+"',contact: '"+mobileP+
                             if(i1 == 1)
                             {
                                 final UpdateInvoice ui = new UpdateInvoice();
-
-
                                 new Thread(new Runnable() {
                                     public void run() {
                                         updateinv= ui.updateInvoice(UserName,razorpayPaymentID1,updateInvoiceURL,"Online");

@@ -53,7 +53,7 @@ public class Wallet extends AppCompatActivity {
         setContentView(R.layout.wallet);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00ba30")));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Wallet");
+        getSupportActionBar().setTitle("FAAST Wallet");
 
         Window window = Wallet.this.getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -77,7 +77,17 @@ public class Wallet extends AppCompatActivity {
                     @Override
                     public void run() {
                         ArrayList<Users> users = parseJSON(data);
-                        addData(users);
+                        if(users.size()==0){
+                            NumberFormat formatter2 = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+                            String zero_in_string = formatter2.format(0.00);
+
+                            TextView tickets_status_table_textview = (TextView) findViewById(R.id.wallet_history_title);
+                            tickets_status_table_textview.setVisibility(View.INVISIBLE);
+                            walletBalanceTextView.setText(zero_in_string);
+                        }
+                        else {
+                            addData(users);
+                        }
                         System.out.println("Output:" + users);
                     }
                 });
